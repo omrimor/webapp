@@ -12,6 +12,9 @@
 
         <link rel="stylesheet" href="css/normalize.css">
         <link rel="stylesheet" href="css/main.css">
+
+        <link rel="stylesheet" href="font-awesome/css/font-awesome.min.css">
+
         <script src="js/vendor/modernizr-2.8.3.min.js"></script>
     </head>
     <body>
@@ -37,7 +40,7 @@
 
             <nav class="cf">
                 <div class="nav-section ns-reporting">
-                    <p>Select Reporting Platform</p>
+                    <p>Select<br>Reporting Platform</p>
 
                     <div class="menu">
                         <div class="menu-hint">
@@ -56,7 +59,7 @@
                 </div>
 
                 <div class="nav-section ns-dashboard">
-                    <p>Select Dashboard</p>
+                    <p>Select<br>Dashboard</p>
 
                     <div class="menu">
                         <div class="menu-hint">
@@ -75,7 +78,7 @@
                 </div>
 
                 <div class="nav-section ns-faq">
-                    <p>Help &amp; Tutorials</p>
+                    <p>Help &amp;<br>Tutorials</p>
 
                     <div class="menu">
                         <div class="menu-hint">
@@ -95,27 +98,39 @@
             </nav>
 
             <div class="tabs">
-                <ul>
-                    <li><a href="#quick-reports">Quick Reports</a>
+                <ul class="tab-headers cf">
+                    <li><a class="active" href="#quick-reports"><i class="fa fa-external-link"></i> Quick Reports</a>
                     </li>
-                    <li><a href="#fmy-folders">My Folders</a>
+                    <li><a href="#fmy-folders"><i class="fa fa-star-o"></i> My Folders</a>
                     </li>
-                    <li><a href="#my-team-folders">My Team Folders</a>
+                    <li><a href="#my-team-folders"><i class="fa fa-folder-open-o"></i> My Team Folders</a>
                     </li>
-                    <li><a href="#public-folders">Public Folders</a>
+                    <li><a href="#public-folders"><i class="fa fa-file-o"></i> Public Folders</a>
                     </li>
                 </ul>
 
-                <div id="quick-reports">
+                <div class="tab-content" id="quick-reports">
+                    <div class="content-wrap">
+                        <div class="tab-content-header">
+                            <select class="iframe-option" name="iframe-options" id="iframe-options">
+                                <option value="Ynet">Ynet</option>
+                                <option value="netcraft">netcraft</option>
+                                <option value="blaa">blaa</option>
+                            </select>
+                            <a class="action-btn expand" href="#">expand</a>
+                            <a class="action-btn settings" href="#">settings</a>
+                        </div>
+                        
+                    </div>
                 </div>
 
-                <div id="fmy-folders">
+                <div class="tab-content" id="fmy-folders">
                 </div>
 
-                <div id="my-team-folders">
+                <div class="tab-content" id="my-team-folders">
                 </div>
 
-                <div id="public-folders">
+                <div class="tab-content" id="public-folders">
                 </div>
             </div>
         </div>
