@@ -97,6 +97,21 @@ ol {
     padding: 0;
 }
 
+select {
+    padding: 5px 8px;
+    width: 130%;
+    border: none;
+    border-radius: none;
+    box-shadow: none;
+    background: transparent;
+    background-image: none;
+    -webkit-appearance: none;
+}
+
+select:focus {
+    outline: none;
+}
+
 /* ==========================================================================
    Browser Upgrade Prompt
    ========================================================================== */
@@ -129,7 +144,7 @@ header {
 .logo {
     position: absolute;
     top: 20px;
-    left: 0;
+    left: 20px;
     display: inline-block;
     text-indent: -9999px;
     width: 148px;
@@ -140,7 +155,7 @@ header {
 .search-box {
     position: absolute;
     top: 20px;
-    right: 0;
+    right: 20px;
 }
 
 input[name="q"] {
@@ -157,11 +172,10 @@ input[name="q"]:focus {
 }
 
 .page-body {
-    position: relative;
-    width: 1320px;
-    margin: 0 auto;
-    padding-top: 20px;
-    background: rgba(0, 0, 0, 0.5);
+    /*position: relative;*/
+    /*max-width: 1320px;*/
+    /*margin: 0 auto;*/
+    background: rgba(0, 0, 0, 0.3);
 }
 
 
@@ -169,7 +183,8 @@ input[name="q"]:focus {
     background: #ebebeb;
     width: 100%;
     height: 36px;
-    padding: 0 20px;
+    padding: 0 1.5625%;
+    margin-top: 20px;
     line-height: 36px;
     font-size: .8rem;
 }
@@ -182,16 +197,16 @@ nav {
 .nav-section {
     position: relative;
     float: left;
-    width: 403px;
+    width: 31.5625%;
     height: 160px;
-    margin-right: 35px;
+    margin-right: 2.65625%;
     background-color: #000;
     overflow: hidden;
-    -webkit-transition: all 2s ease-out;
-       -moz-transition: all 2s ease-out;
-        -ms-transition: all 2s ease-out;
-         -o-transition: all 2s ease-out;
-            transition: all 2s ease-out;
+    -webkit-transition: all .5s ease;
+       -moz-transition: all .5s ease;
+        -ms-transition: all .5s ease;
+         -o-transition: all .5s ease;
+            transition: all .5s ease;
 }
 
 .nav-section:hover {
@@ -231,6 +246,7 @@ nav {
 
 .menu {
     position: absolute;
+    z-index: 100;
     bottom: 0;
     left: 0;
     width: 100%;
@@ -257,20 +273,27 @@ nav {
     border-right: 7px solid transparent;
     /*side of pointer*/
     border-top: 7px solid #000;
-    -webkit-transition: rotateX() 1s ease-in-out;
-       -moz-transition: rotateX() 1s ease-in-out;
-        -ms-transition: rotateX() 1s ease-in-out;
-         -o-transition: rotateX() 1s ease-in-out;
-            transition: rotateX() 1s ease-in-out;
-
 }
 
-.nav-section:hover ~ .arrow {
-    -webkit-transform: rotateX(180deg);
-       -moz-transform: rotateX(180deg);
-        -ms-transform: rotateX(180deg);
-         -o-transform: rotateX(180deg);
-            transform: rotateX(180deg);
+.arrow__is-animating {
+    -webkit-transform: rotateZ(0);
+       -moz-transform: rotateZ(0);
+        -ms-transform: rotateZ(0);
+         -o-transform: rotateZ(0);
+            transform: rotateZ(0);
+    -webkit-transition: all .4s ease;
+       -moz-transition: all .4s ease;
+        -ms-transition: all .4s ease;
+         -o-transition: all .4s ease;
+            transition: all .4s ease;
+}
+
+.nav-section:hover ~ .arrow.arrow__is-animating {
+    -webkit-transform: rotateZ(180deg);
+       -moz-transform: rotateZ(180deg);
+        -ms-transform: rotateZ(180deg);
+         -o-transform: rotateZ(180deg);
+            transform: rotateZ(180deg);
 }
 
 .action-list {
@@ -278,8 +301,8 @@ nav {
     top: 36px;
     left: 0;
     width: 100%;
+    box-shadow: 0 0 3px rgba(0, 0, 0, 0.5);
 }
-
 
 .action-list li {
     width: 100%;
@@ -311,9 +334,9 @@ nav {
 
 .tab-headers li {
     float: left;
-    width: 293px;
+    width: 22.96785%;
     height: 50px;
-    margin-right: 35px;
+    margin-right: 2.65625%;
     line-height: 50px;
     text-align: center;
     font-size: .8rem;
@@ -346,47 +369,71 @@ nav {
 }
 
 .tab-content-header {
-    width: inherit;
+    width: 100%;
+    padding-top: 20px;
+    position: relative;
 }
 
-.iframe-option {
+.choose-iframe {
     width: 280px;
+    position: relative;
     height: 36px;
     background: #fff;
     overflow: hidden;
     font-size: .8rem;
+    border: 1px solid #fff;
 }
 
-select {
-    padding: 5px 8px;
-    width: 130%;
-    border: none;
-    border-radius: none;
-    box-shadow: none;
-    background: transparent;
-    background-image: none;
-    -webkit-appearance: none;
+.choose-iframe:after {
+    content: url(../img/select-arrow.png);
+    width: 20px;
+    display: block;
+    position: absolute;
+    top: 0;
+    right: 0;
 }
 
-select:focus {
-    outline: none;
+.choose-iframe:hover {
+    border-color: #b4b4b4;
+    cursor: pointer;
 }
 
 .action-btn {
-    position: relative;
+    position: absolute;
+    top: 20px;
     width: 40px;
     height: 40px;
     display: inline-block;
     text-indent: -9999px;
+    background-repeat: no-repeat;
+    background-position: 50% 50%;
 }
 
-.action-btn.expand:before {
-    content: url(../img/expand.png) no-repeat;
-    position: absolute;
-    top: 0;
-    left: 0;
+.action-btn:hover {
+    background-color: #fff;
 }
 
+.action-btn.expand {
+    background-image: url(../img/expand.png);
+    right: 40px;
+}
+
+.action-btn.settings {
+    background-image: url(../img/settings.png);
+    right: 0;
+}
+
+.tab-content-body {
+    width: 100%;
+    position: relative;
+    margin-top: 20px;
+    background-color: #fff;
+}
+
+.tab-content-body--iframe {
+    width: 100%;
+    height: 1000px;
+}
 
 /* ==========================================================================
    Helper classes
@@ -463,15 +510,19 @@ select:focus {
 
 .layout-wrap {
     position: relative;
-    max-width: 1280px;
+    max-width: 1320px;
+    min-width: 640px;
+    height: 100%;
     margin: 0 auto;
+    padding: 0 1.515151515%;
 }
 
 .content-wrap {
     position: relative;
-    max-width: 1240px;
+    max-width: 1280px;
+    min-width: 600px;
     margin: 0 auto;
-    padding-top: 20px;
+    padding: 0 1.515151515%;
 }
 
 /* ==========================================================================
