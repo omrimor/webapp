@@ -201,7 +201,7 @@ nav {
     height: 160px;
     margin-right: 2.65625%;
     background-color: #000;
-    overflow: hidden;
+    /*overflow: hidden;*/
     -webkit-transition: all .5s ease;
        -moz-transition: all .5s ease;
         -ms-transition: all .5s ease;
@@ -211,6 +211,7 @@ nav {
 
 .nav-section:hover {
     cursor: pointer;
+    /*height: 300px;*/
     overflow: inherit;
 }
 
@@ -226,22 +227,23 @@ nav {
     margin-top: 10px;
 }
 
-.ns-reporting:after,
-.ns-dashboard:after,
-.ns-faq:after {
-    width: 128px;
-    margin: 0 auto;
-    display: inherit;
+.ns-reporting,
+.ns-dashboard,
+.ns-faq {
+    background-repeat: no-repeat;
+    background-position: 50% 75px;
 }
 
-.ns-dashboard:after {
-    content: url(../img/action-report-top.png);
+.ns-dashboard {
+    background-image: url(../img/action-report-top.png);
 }
-.ns-faq:after {
-    content: url(../img/actions-help.png);
+
+.ns-faq {
+    background-image: url(../img/actions-help.png);
 }
-.ns-reporting:after {
-    content: url(../img/action-report-new.png);
+
+.ns-reporting {
+    background-image: url(../img/action-report-new.png);
 }
 
 .menu {
@@ -288,7 +290,7 @@ nav {
             transition: all .4s ease;
 }
 
-.nav-section:hover ~ .arrow.arrow__is-animating {
+.nav-section:hover .arrow.arrow__is-animating {
     -webkit-transform: rotateZ(180deg);
        -moz-transform: rotateZ(180deg);
         -ms-transform: rotateZ(180deg);
@@ -301,7 +303,18 @@ nav {
     top: 36px;
     left: 0;
     width: 100%;
+    height: 0;
+    overflow: hidden;
     box-shadow: 0 0 3px rgba(0, 0, 0, 0.5);
+    -webkit-transition: height .4s ease;
+       -moz-transition: height .4s ease;
+        -ms-transition: height .4s ease;
+         -o-transition: height .4s ease;
+            transition: height .4s ease;
+}
+
+.nav-section:hover .action-list {
+    height: 300px;
 }
 
 .action-list li {
@@ -385,12 +398,14 @@ nav {
 }
 
 .choose-iframe:after {
-    content: url(../img/select-arrow.png);
+    content:"";
     width: 20px;
+    height: 20px;
     display: block;
     position: absolute;
     top: 0;
     right: 0;
+    background-image: url(../img/select-arrow.png); 
 }
 
 .choose-iframe:hover {
