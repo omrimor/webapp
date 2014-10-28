@@ -32,12 +32,12 @@
       </div>
     </header>
 
-    <div class="layout-wrap page-body cf">
+    <div class="layout-wrap page-body cf" role="main">
         <div class="notifications">
             <span>this is the notification text. Will be dynamic</span>
         </div>
 
-        <nav class="cf">
+        <nav class="cf" role="navigation">
             <div class="nav-section ns-reporting">
                 <p>Select<br>Reporting Platform</p>
                 <div class="menu">
@@ -88,7 +88,7 @@
             </div>
         </nav>
 
-        <div class="tabs">
+        <div class="tabs" role="tabpanel">
             <ul class="tab-headers cf">
                 <li><a class="active" href="#quick-reports"><i class="fa fa-external-link"></i> Quick Reports</a>
                 </li>
@@ -100,13 +100,62 @@
                 </li>
             </ul>
             <div class="tab-content" id="quick-reports">
-                <div class="content-wrap">
+                <div class="content-wrap cf">
+                    <div class="tab-content-settings">
+                        <form action="">
+                            <fieldset>
+                                <div class="tab-content-settings--input-container">
+                                    <span>Report 01</span>
+                                    <div class="input-wrap">
+                                        <label for="name01">Name:</label>
+                                        <input class="settings-field" type="text" id="name01">
+                                    </div>
+                                    <div class="input-wrap">
+                                        <label for="url01">URL:</label>
+                                        <input class="settings-field" type="url" id="url01">
+                                    </div>
+                                </div>
+                            </fieldset>
+                            <fieldset>
+                                <div class="tab-content-settings--input-container">
+                                    <span>Report 02</span>
+                                    <div class="input-wrap">
+                                        <label for="name02">Name:</label>
+                                        <input class="settings-field" type="text" id="name02">
+                                    </div>
+                                    <div class="input-wrap">
+                                        <label for="url02">URL:</label>
+                                        <input class="settings-field" type="url" id="url02">
+                                    </div>
+                                </div>
+                            </fieldset>
+                            <fieldset>
+                                <div class="tab-content-settings--input-container">
+                                    <span>Report 03</span>
+                                    <div class="input-wrap">
+                                        <label for="name03">Name:</label>
+                                        <input class="settings-field" type="text" id="name03">
+                                    </div>
+                                    <div class="input-wrap">
+                                        <label for="url03">URL:</label>
+                                        <input class="settings-field" type="url" id="url03">
+                                    </div>
+                                </div>
+                            </fieldset>
+                            <div class="settings-footer">
+                            <a href="#" class="link cancel-form">cancel</a>
+                                <button type="submit" class="btn btn__submit-form">save</button>
+                            </div>
+                        </form>
+                    </div>
                     <div class="tab-content-header">
-                        <select class="choose-iframe" name="choose-iframe" id="choose-iframe-select">
-                            <option value="netcraft">netcraft</option>
-                            <option value="ynet">ynet</option>
-                            <option value="blaa">blaa</option>
-                        </select>
+                        <div class="select--choose-iframe">
+                            <select name="choose-iframe" id="choose-iframe-select">
+                                <option value="netcraft">netcraft</option>
+                                <option value="ynet">ynet</option>
+                                <option value="blaa">blaa</option>
+                            </select>
+                        </div>
                         <a class="action-btn expand" href="#">expand</a>
                         <a class="action-btn settings" href="#">settings</a>
                     </div>
