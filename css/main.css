@@ -365,7 +365,8 @@ nav {
     text-decoration: none;
 }
 
-.tab-headers li > a:hover {
+.tab-headers li > a:hover,
+.tab-headers li > a:focus {
     background: #4c4c4c;
 }
 

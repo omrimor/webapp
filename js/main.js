@@ -1,3 +1,5 @@
+/* globals UTILS*/
+
 /**
  * Main.js for webapp project
  */
@@ -5,18 +7,57 @@
 window.onload = (function() {
 	var settings = document.querySelector('.tab-content-settings'),
 		tabs = document.querySelector('.tab-headers'),
-		settingsBtn = document.querySelector('.action-btn.settings');
+		allTabs = document.querySelectorAll('a[role="tab"]'),
+		tabBody = document.querySelectorAll('div[role="tabpanel"]'),
 
+	settingsBtn = document.querySelector('.action-btn.settings');
 	settings.classList.add('hidden');
+
 
 	// Initialize if class exists
 	var hasClass = (' ' + settings.className + ' ').indexOf('hidden') > -1;
 
+
+		var curElement = document.activeElement;
+
+		// if(curElement){
+		// 	console.log(curElement);
+
+		// }
+		// var curElement = document.hasFocus();
+
+
+
+	for (var i = 0; i < allTabs.length; i++) {
+		var cur = allTabs[i];
+		var hasFocus = document.hasFocus();
+		if(hasFocus){
+			console.log(curElement.tagName);
+		}
+	}
+
+
+	var changeHash = function(e){
+		var currentHash = window.location.hash;
+
+		for (var i = 0; i < allTabs.length; i++) {
+			var current = allTabs[i];
+			var currentAttr = current.getAttribute('href').split('#')[1];
+			var currentActivePanel = document.getElementById(currentAttr);
+
+			current.classList.remove('active');
+			currentActivePanel.classList.remove('active');
+
+			if(currentHash === current.getAttribute('href')){
+				current.classList.add('active');
+				currentActivePanel.classList.add('active');
+			}
+		}
+	};
+
 	var activeTab = function(e){
 		e.preventDefault();
 		var currentTab = e.target,
-			allTabs = document.querySelectorAll('a[role="tab"]'),
-			tabBody = document.querySelectorAll('div[role="tabpanel"]'),
 			tabAttr = currentTab.getAttribute('href').split('#')[1],
 			activePanel = document.getElementById(tabAttr);
 
@@ -30,6 +71,7 @@ window.onload = (function() {
 
 		currentTab.classList.add('active');
 		activePanel.classList.add('active');
+		window.location.hash = currentTab.getAttribute('href');
 	};
 
 
@@ -47,7 +89,8 @@ window.onload = (function() {
 		}
 	};
 
-	settingsBtn.addEventListener('click', toggleSettings);
-	tabs.addEventListener('click', activeTab);
+	UTILS.addEvent(settingsBtn, 'click', toggleSettings);
+	UTILS.addEvent(tabs, 'click', activeTab);
+	UTILS.addEvent(window, 'hashchange', changeHash);
 
 })();
