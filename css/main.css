@@ -80,7 +80,9 @@ fieldset {
     border: 0;
     margin: 0;
     padding: 0;
+    height: 45px;
 }
+
 
 /*
  * Allow only vertical resizing of textareas.
@@ -386,6 +388,7 @@ nav {
 }
 
 .tab-content-header {
+    height: 40px;
     width: 100%;
     padding-top: 20px;
     position: relative;
@@ -441,6 +444,11 @@ nav {
     right: 40px;
 }
 
+.action-btn.expand.stand__alone {
+    right: 0;
+}
+
+
 .action-btn.settings {
     z-index: 50;
     background-image: url(../img/settings.png);
@@ -474,6 +482,7 @@ nav {
 }
 
 .tab-content-settings--input-container {
+    position: relative;
     width: 100%;
     background-color: #dcdada;
     color: inherit;
@@ -485,22 +494,35 @@ nav {
 }
 
 .fs-name {
+    position: absolute;
+    top: 0;
+    left: 0;
     width: 10%;
-    display: inline-block;
+    padding-left: 1.515151515%;
+    /*display: inline;*/
 }
 
 .input-name {
+    position: absolute;
+    top: 0;
+    left: 0;
     display: inline-block;
     width: 7%;
 }
 
 .input-wrap {
-    width: 44.7%;
+    position: relative;
+    float: right;
+    height: 45px;
+    width: 44%;
+    margin-left: 1.515151515%;
     display: inline-block;
-    padding: 0 1.515151515%
 }
 
 .settings-field {
+    position: absolute;
+    top: 7px;
+    right: 0;
     display: inline-block;
     width: 89%;
     height: 30px;
@@ -508,8 +530,8 @@ nav {
     border: 1px solid #fff;
     background-color: #fff;
     font-size: inherit;
-    padding: 0 10px;
-    margin-left: 10px;
+    padding: 0 1.515151515%;
+    margin-left: 1.515151515%;
 }
 
 .settings-field:hover,

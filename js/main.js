@@ -5,45 +5,33 @@
  */
 
 window.onload = (function() {
-	var settings = document.querySelector('.tab-content-settings'),
+	var qrSettings = document.querySelector('.js-qrTabSettings'),
+		mtfSettings = document.querySelector('.js-mtfTabSettings'),
 		tabs = document.querySelector('.tab-headers'),
 		allTabs = document.querySelectorAll('a[role="tab"]'),
 		tabBody = document.querySelectorAll('div[role="tabpanel"]'),
+		qrSettingsBtn = document.querySelector('.js-qrBtnSettings'),
+		mtfSettingsBtn = document.querySelector('.js-mtfBtnSettings'),
+		mtfIframe = document.querySelector('.js-mtfIframe');
 
-	settingsBtn = document.querySelector('.action-btn.settings');
-	settings.classList.add('hidden');
+	qrSettings.classList.add('hidden');
 
-
-	// Initialize if class exists
-	var hasClass = (' ' + settings.className + ' ').indexOf('hidden') > -1;
-
-
-		var curElement = document.activeElement;
-
-		// if(curElement){
-		// 	console.log(curElement);
-
-		// }
-		// var curElement = document.hasFocus();
+	// Initialize if class hidden exists for the qrSettings toggle
+	var qrHasClass = (' ' + qrSettings.className + ' ').indexOf('hidden') > -1;
+	var mtfHasClass = (' ' + mtfSettings.className + ' ').indexOf('hidden') > -1;
 
 
-
-	for (var i = 0; i < allTabs.length; i++) {
-		var cur = allTabs[i];
-		var hasFocus = document.hasFocus();
-		if(hasFocus){
-			console.log(curElement.tagName);
-		}
-	}
-
+	var getTab = function(tab){
+	    return tab.getAttribute('href').split('#')[1];
+	};
 
 	var changeHash = function(e){
 		var currentHash = window.location.hash;
 
 		for (var i = 0; i < allTabs.length; i++) {
-			var current = allTabs[i];
-			var currentAttr = current.getAttribute('href').split('#')[1];
-			var currentActivePanel = document.getElementById(currentAttr);
+			var current = allTabs[i],
+				currentAttr = getTab(current),
+				currentActivePanel = document.getElementById(currentAttr);
 
 			current.classList.remove('active');
 			currentActivePanel.classList.remove('active');
@@ -58,7 +46,7 @@ window.onload = (function() {
 	var activeTab = function(e){
 		e.preventDefault();
 		var currentTab = e.target,
-			tabAttr = currentTab.getAttribute('href').split('#')[1],
+			tabAttr = getTab(currentTab),
 			activePanel = document.getElementById(tabAttr);
 
 		for (var i = 0; i < tabBody.length; i++) {
@@ -72,24 +60,33 @@ window.onload = (function() {
 		currentTab.classList.add('active');
 		activePanel.classList.add('active');
 		window.location.hash = currentTab.getAttribute('href');
+		if (tabAttr === 'my-team-folders'){
+			mtfSettingsBtn.classList.add('active');
+			// mtfIframe.classList.add('hidden');
+
+		}
+
 	};
-
-
 
 	var toggleSettings = function(e){
 		e.preventDefault();
-		if (hasClass){
+		if (qrHasClass || mtfHasClass){
 			this.classList.add('active');
-			settings.classList.remove('hidden');
-			hasClass = false;
+			qrSettings.classList.remove('hidden');
+			mtfSettings.classList.remove('hidden');
+			qrHasClass = false;
+			mtfHasClass = false;
 		} else {
 			this.classList.remove('active');
-			settings.classList.add('hidden');
-			hasClass = true;
+			qrSettings.classList.add('hidden');
+			mtfSettings.classList.add('hidden');
+			qrHasClass = true;
+			mtfHasClass = true;
 		}
 	};
 
-	UTILS.addEvent(settingsBtn, 'click', toggleSettings);
+	UTILS.addEvent(qrSettingsBtn, 'click', toggleSettings);
+	UTILS.addEvent(mtfSettingsBtn, 'click', toggleSettings);
 	UTILS.addEvent(tabs, 'click', activeTab);
 	UTILS.addEvent(window, 'hashchange', changeHash);
 

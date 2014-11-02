@@ -101,9 +101,10 @@
             </ul>
             <div role="tabpanel" class="tab-content active" id="quick-reports">
                 <div class="content-wrap cf">
-                    <div class="tab-content-settings">
+                    <div class="tab-content-settings js-qrTabSettings">
                         <form action="">
-                            <fieldset class="tab-content-settings--input-container">
+                        <div class="tab-content-settings--input-container cf">
+                            <fieldset>
                                     <span class="fs-name">Report 01</span>
                                     <div class="input-wrap">
                                         <label class="input-name" for="name01">Name:</label>
@@ -114,6 +115,7 @@
                                         <input class="settings-field" type="url" id="url01">
                                     </div>
                             </fieldset>
+                        </div>
                             <fieldset class="tab-content-settings--input-container">
                                     <span class="fs-name">Report 02</span>
                                     <div class="input-wrap">
@@ -151,16 +153,94 @@
                             </select>
                         </div>
                         <a class="action-btn expand" href="#">expand</a>
-                        <a class="action-btn settings" href="#">settings</a>
+                        <a class="action-btn settings js-qrBtnSettings" href="#">settings</a>
                     </div>
                     <div class="tab-content-body">
                         <iframe class="tab-content-body--iframe" src="http://www.netcraft.co.il/" frameborder="0"></iframe>
                     </div>
                 </div>
             </div>
-            <div role="tabpanel" class="tab-content" id="fmy-folders">this is the 2 tab</div>
-            <div role="tabpanel" class="tab-content" id="my-team-folders">this is the 3 tab</div>
-            <div role="tabpanel" class="tab-content" id="public-folders">this is the 4 tab</div>
+            <div role="tabpanel" class="tab-content" id="fmy-folders">
+                <div class="content-wrap cf">
+                    <div class="tab-content-header">
+                        <a class="action-btn expand stand__alone" href="#">expand</a>
+                    </div>
+                    <div class="tab-content-body">
+                        <iframe class="tab-content-body--iframe" src="http://www.paulirish.com/" frameborder="0"></iframe>
+                    </div>
+                </div>
+            </div>
+            <div role="tabpanel" class="tab-content" id="my-team-folders">
+                <div class="content-wrap cf">
+                    <div class="tab-content-settings js-mtfTabSettings">
+                        <form action="">
+                        <div class="tab-content-settings--input-container cf">
+                            <fieldset>
+                                    <span class="fs-name">Report 01</span>
+                                    <div class="input-wrap">
+                                        <label class="input-name" for="name01">Name:</label>
+                                        <input class="settings-field" type="text" id="name01">
+                                    </div>
+                                    <div class="input-wrap">
+                                        <label class="input-name" for="url01">URL:</label>
+                                        <input class="settings-field" type="url" id="url01">
+                                    </div>
+                            </fieldset>
+                        </div>
+                            <fieldset class="tab-content-settings--input-container">
+                                    <span class="fs-name">Report 02</span>
+                                    <div class="input-wrap">
+                                        <label class="input-name" for="name02">Name:</label>
+                                        <input class="settings-field" type="text" id="name02">
+                                    </div>
+                                    <div class="input-wrap">
+                                        <label class="input-name" for="url02">URL:</label>
+                                        <input class="settings-field" type="url" id="url02">
+                                    </div>
+                            </fieldset>
+                            <fieldset class="tab-content-settings--input-container">
+                                    <span class="fs-name">Report 03</span>
+                                    <div class="input-wrap">
+                                        <label class="input-name" for="name03">Name:</label>
+                                        <input class="settings-field" type="text" id="name03">
+                                    </div>
+                                    <div class="input-wrap">
+                                        <label class="input-name" for="url03">URL:</label>
+                                        <input class="settings-field" type="url" id="url03">
+                                    </div>
+                            </fieldset>
+                            <div class="settings-footer">
+                            <a href="#" class="link cancel-form">cancel</a>
+                                <button type="submit" class="btn btn__submit-form">save</button>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="tab-content-header">
+                        <div class="select--choose-iframe">
+                            <select name="choose-iframe" id="choose-iframe-select">
+                                <option value="netcraft">netcraft</option>
+                                <option value="ynet">ynet</option>
+                                <option value="blaa">blaa</option>
+                            </select>
+                        </div>
+                        <a class="action-btn expand" href="#">expand</a>
+                        <a class="action-btn settings js-mtfBtnSettings" href="#">settings</a>
+                    </div>
+                    <div class="tab-content-body">
+                        <iframe class="tab-content-body--iframe js-mtfIframe" src="http://www.netcraft.co.il/" frameborder="0"></iframe>
+                    </div>
+                </div>
+            </div>
+            <div role="tabpanel" class="tab-content" id="public-folders">
+                <div class="content-wrap cf">
+                    <div class="tab-content-header">
+                        <a class="action-btn expand stand__alone" href="#">expand</a>
+                    </div>
+                    <div class="tab-content-body">
+                        <iframe class="tab-content-body--iframe" src="https://news.layervault.com/" frameborder="0"></iframe>
+                    </div>
+                </div>
+            </div>
         </div>
         </div>
         <script src="//ajax.googleapis.com/ajax/libs/jquery/{{JQUERY_VERSION}}/jquery.min.js"></script>
