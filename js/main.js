@@ -101,7 +101,7 @@ window.onload = (function() {
 
 	if (url === 'omrimor.github.io'){
 
-		UTILS.ajax('../data/notification.txt', {
+		UTILS.ajax('../webapp/data/notification.txt', {
 			done: function(response) {
 				notification.classList.remove('hidden');
 				notificationMsg.innerHTML = response;
