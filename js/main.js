@@ -16,11 +16,7 @@ window.onload = (function() {
 		notificationMsg = notification.childNodes[1],
 		mtfIframe = document.querySelector('.js-mtfIframe');
 
-		console.log(notification);
-		console.log(notificationMsg);
-
-		notification.classList.add('hidden');
-
+	notification.classList.add('hidden');
 	qrSettings.classList.add('hidden');
 
 	// Initialize if class hidden exists for the qrSettings toggle
@@ -69,7 +65,6 @@ window.onload = (function() {
 		window.location.hash = currentTab.getAttribute('href');
 		if (tabAttr === 'my-team-folders'){
 			mtfSettingsBtn.classList.add('active');
-			// mtfIframe.classList.add('hidden');
 		}
 
 	};
@@ -96,37 +91,15 @@ window.onload = (function() {
 	UTILS.addEvent(tabs, 'click', activeTab);
 	UTILS.addEvent(window, 'hashchange', changeHash);
 
-	var indexOne = location.href.indexOf('://') + 3,
-		url = location.href.substring(indexOne, location.href.indexOf('/', indexOne));
-
-	if (url === 'omrimor.github.io'){
-
-		UTILS.ajax('../webapp/data/notification.txt', {
-			done: function(response) {
-				notification.classList.remove('hidden');
-				notificationMsg.innerHTML = response;
-				console.log(response);
-			},
-			fail: function(err) {
-				console.log(err);
-			}
-		});
-
-	} else {
-
-		UTILS.ajax('../webapp/data/notification.txt', {
-			done: function(response) {
-				notification.classList.remove('hidden');
-				notificationMsg.innerHTML = response;
-				console.log(response);
-			},
-			fail: function(err) {
-				console.log(err);
-			}
-		});
-
-
-	}
-
+	UTILS.ajax('../webapp/data/notification.txt', {
+		done: function(response) {
+			notification.classList.remove('hidden');
+			notificationMsg.innerHTML = response;
+			console.log(response);
+		},
+		fail: function(err) {
+			// console.log(err);
+		}
+	});
 
 })();
