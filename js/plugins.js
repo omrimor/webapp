@@ -107,6 +107,12 @@ var UTILS = (function () {
                         if (options.done) {
                             options.done.call(xhr, res);
                         }
+
+                        // Trigger done callback with the proper response
+                        if (options.fail) {
+                            options.fail.call(xhr, 'Bad path, sorry');
+                        }
+
                     }
 
                 }
