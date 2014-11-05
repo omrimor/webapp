@@ -19,17 +19,25 @@ window.onload = (function() {
 	notification.classList.add('hidden');
 	qrSettings.classList.add('hidden');
 
-	// Initialize if class hidden exists for the qrSettings toggle
-	var qrHasClass = (' ' + qrSettings.className + ' ').indexOf('hidden') > -1;
-	var mtfHasClass = (' ' + mtfSettings.className + ' ').indexOf('hidden') > -1;
-
-
 	var getTab = function(tab){
 	    return tab.getAttribute('href').split('#')[1];
 	};
 
-	var changeHash = function(e){
-		var currentHash = window.location.hash;
+	var hasClass = function (element, cls) {
+	    return (' ' + element.className + ' ').indexOf(' ' + cls + ' ') > -1;
+	};
+
+	// Initialize if class hidden exists for the qrSettings & mtfSettings toggle
+	var qrSettingsClass = hasClass(qrSettings, 'hidden');
+	var mtfClass = hasClass(mtfSettings, 'hidden');
+
+	var setTab = function(e){
+		e.preventDefault();
+		var currentHash = location.hash.replace('panel-', '');
+
+		if (currentHash === '') {
+			currentHash =  allTabs[0].getAttribute('href');
+		}
 
 		for (var i = 0; i < allTabs.length; i++) {
 			var current = allTabs[i],
@@ -62,34 +70,30 @@ window.onload = (function() {
 
 		currentTab.classList.add('active');
 		activePanel.classList.add('active');
-		window.location.hash = currentTab.getAttribute('href');
-		if (tabAttr === 'my-team-folders'){
-			mtfSettingsBtn.classList.add('active');
-		}
-
+		location.hash = 'panel-' + tabAttr.replace('#', '');
 	};
 
 	var toggleSettings = function(e){
 		e.preventDefault();
-		if (qrHasClass || mtfHasClass){
+		if (qrSettingsClass || mtfClass){
 			this.classList.add('active');
 			qrSettings.classList.remove('hidden');
 			mtfSettings.classList.remove('hidden');
-			qrHasClass = false;
-			mtfHasClass = false;
+			qrSettingsClass = false;
+			mtfClass = false;
 		} else {
 			this.classList.remove('active');
 			qrSettings.classList.add('hidden');
 			mtfSettings.classList.add('hidden');
-			qrHasClass = true;
-			mtfHasClass = true;
+			qrSettingsClass = true;
+			mtfClass = true;
 		}
 	};
 
 	UTILS.addEvent(qrSettingsBtn, 'click', toggleSettings);
 	UTILS.addEvent(mtfSettingsBtn, 'click', toggleSettings);
 	UTILS.addEvent(tabs, 'click', activeTab);
-	UTILS.addEvent(window, 'hashchange', changeHash);
+	UTILS.addEvent(window, 'hashchange', setTab);
 
 	UTILS.ajax('../webapp/data/notification.txt', {
 		done: function(response) {
