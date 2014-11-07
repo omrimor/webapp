@@ -122,19 +122,72 @@ var UTILS = (function () {
             xhr.send(null);
         },
 
-        addEvent: function(elem, type, handler){
-            if (document.addEventListener){
-                elem.addEventListener(type, handler, false);
-            } else {
-                elem.attachEvent(('on' + type), handler);
+        addEvent: function (elm, type, handler) {
+            var types = type.split(' '),
+                ieHandler;
+
+            // Recurse if multiple event types were given
+            if (types.length > 1) {
+                // On each iteration, remove the first value in the array
+                while (types.length) {
+                    UTILS.addEvent(elm, types.shift(), handler);
+                }
+
+                return;
+            }
+
+            if (window.addEventListener) {
+                // Modern browsers
+                elm.addEventListener(type, handler, false);
+            } else if (window.attachEvent) {
+                // IE8 and below
+                // Required for normalizing the "event" object
+                ieHandler = function (e) {
+                    e.target = e.target || e.srcElement;
+                    e.currentTarget = elm;
+
+                    e.stopPropagation = e.stopPropagation || function () {
+                        e.cancelBubble = true;
+                    };
+
+                    e.preventDefault = e.preventDefault || function () {
+                        e.returnValue = false;
+                    };
+
+                    return handler.call(elm, e);
+                };
+
+                // Save a reference to the handler as a unique key
+                elm[type + handler] = ieHandler;
+                elm.attachEvent('on' + type, ieHandler);
             }
         },
-        removeEvent: function(elem, type, handler){
-            if (document.addEventListener){
-                elem.removeEventListener(type, handler, false);
-            } else {
-                elem.detachEvent(('on' + type), handler);
+
+        removeEvent: function (elm, type, handler) {
+            var handlerRef;
+
+            if (window.removeEventListener) {
+                // Modern browsers
+                elm.removeEventListener(type, handler, false);
+            } else if (window.detachEvent) {
+                // IE8 and below
+                handlerRef = elm[type + handler];
+
+                // Make sure the handler key exists
+                if (handlerRef) {
+                    elm.detachEvent('on' + type, handlerRef);
+                    // Remove the key from the object, prevent memory leaks
+                    delete elm[type + handler];
+                }
             }
+        },
+
+        qs: function(selector){
+            return document.querySelector(selector);
+        },
+
+        qsa: function(selector){
+            return document.querySelectorAll(selector);
         }
     };
 }());
