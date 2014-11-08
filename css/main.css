@@ -457,9 +457,9 @@ nav {
 
 .tab-content-body {
     width: 100%;
+    min-height: 400px;
     position: relative;
-    margin-top: 20px;
-    background-color: #fff;
+    margin-top: 40px;
 }
 
 .tab-content-body--iframe {
@@ -494,12 +494,9 @@ nav {
 }
 
 .fs-name {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 10%;
+    float: left;
+    width: 5%;
     min-width: 80px;
-    padding-left: 1.515151515%;
 }
 
 .input-name {
@@ -513,10 +510,10 @@ nav {
 
 .input-wrap {
     position: relative;
-    float: right;
+    float: left;
     height: 45px;
-    width: 44%;
-    margin-left: 1.515151515%;
+    width: 40%;
+    margin-left: 3.03030303%;
     display: inline-block;
 }
 

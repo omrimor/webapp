@@ -9,11 +9,21 @@ window.onload = (function() {
 		qrSettingsBtn = UTILS.qs('.js-qrBtnSettings'),
 		mtfSettingsBtn = UTILS.qs('.js-mtfBtnSettings'),
 		notification = UTILS.qs('.notifications'),
+		openInNewTabIcon  = UTILS.qs('.action-btn.expand'),
+		selectBox = UTILS.qs('.select--choose-iframe'),
+		submitBtn = UTILS.qs('.btn.btn__submit-form'),
+		cancelFormBtn = UTILS.qs('.link.cancel-form'),
+		inputFieldsQr = UTILS.qsa('.settings-field.js-qr'),
+		inputTypeText = UTILS.qsa('input[type="text"]'),
+		collectInputObj = {},
+		qrIframeContainer = UTILS.qs('.tab-content-body--iframe'),
 		notificationMsg = notification.childNodes[1],
 		mtfIframe = UTILS.qs('.js-mtfIframe');
 
+	openInNewTabIcon.classList.add('hidden');
 	notification.classList.add('hidden');
-	qrSettings.classList.add('hidden');
+	selectBox.classList.add('hidden');
+	qrIframeContainer.classList.add('hidden');
 
 	var getElmAttribute = function(elm){
 	    return elm.getAttribute('href').split('#')[1];
@@ -21,6 +31,12 @@ window.onload = (function() {
 
 	var hasClass = function (element, cls) {
 	    return (' ' + element.className + ' ').indexOf(' ' + cls + ' ') > -1;
+	};
+
+	var getMatchingPanel = function(tab){
+		var tabAttr = getElmAttribute(tab),
+			matchingPanel = document.getElementById(tabAttr);
+			return matchingPanel;
 	};
 
 	var addClass = function(nodeElm){
@@ -51,7 +67,7 @@ window.onload = (function() {
 		for (var i = 0; i < allTabs.length; i++) {
 			var currentElm = allTabs[i],
 				currentElmAttr = getElmAttribute(currentElm),
-				currentActivePanel = document.getElementById(currentElmAttr);
+				currentActivePanel = getMatchingPanel(currentElm);
 
 				removeClass(currentElm);
 				removeClass(currentActivePanel);
@@ -69,6 +85,16 @@ window.onload = (function() {
 			tabAttr = getElmAttribute(clicked);
 
 		location.hash = 'panel-' + tabAttr.replace('#', '');
+	};
+
+	var keypressOpenTab = function(e){
+		e.preventDefault();
+		var focused = e.target,
+			tabAttr = getElmAttribute(focused);
+
+		if (e.keyCode === 13 || e.keyCode === 32) {
+			location.hash = 'panel-' + tabAttr.replace('#', '');
+		}
 	};
 
 	var toggleSettings = function(e){
@@ -89,12 +115,46 @@ window.onload = (function() {
 		}
 	};
 
+	var closeForm = function(e){
+		e.preventDefault();
+		qrSettings.classList.add('hidden');
+		qrSettingsBtn.classList.remove('active');
+
+	};
+
+	var saveInput = function(e){
+		e.preventDefault();
+		console.log(inputTypeText);
+
+		for (var i = 0; i < inputFieldsQr.length; i++) {
+			var fieldValue = inputFieldsQr[i].value;
+			var strID = inputFieldsQr[i].id;
+			strID =strID.slice((-2));
+
+			console.log(inputFieldsQr[i].type);
+			console.log(strID);
+
+
+			// if(inputFieldsQr[i].type === 'type'){
+			// 	collectInputObj[fieldValue];
+			// }
+
+			// if(inputFieldsQr[i].type === 'url'){
+			// 	collectInputObj[fieldValue] = fieldValue;
+			// }
+
+		}
+	};
+
 	setTab();
 
 	UTILS.addEvent(qrSettingsBtn, 'click', toggleSettings);
 	UTILS.addEvent(mtfSettingsBtn, 'click', toggleSettings);
 	UTILS.addEvent(tabContainer, 'click', changeHash);
+	UTILS.addEvent(tabContainer, 'keypress', keypressOpenTab);
 	UTILS.addEvent(window, 'hashchange', setTab);
+	UTILS.addEvent(cancelFormBtn, 'click', closeForm);
+	UTILS.addEvent(submitBtn, 'click', saveInput);
 
 	UTILS.ajax('../webapp/data/notification.txt', {
 		done: function(response) {
