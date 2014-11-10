@@ -144,7 +144,7 @@ var UTILS = (function () {
                 // Required for normalizing the "event" object
                 ieHandler = function (e) {
                     e.target = e.target || e.srcElement;
-                    e.currentTarget = elm;
+                    e.currentTarget = e.currentTarget || elm;
 
                     e.stopPropagation = e.stopPropagation || function () {
                         e.cancelBubble = true;
@@ -163,6 +163,13 @@ var UTILS = (function () {
             }
         },
 
+        /**
+         * Cross browser event removal
+         *
+         * @param {Object}   elm     Element on which the event should be unbound
+         * @param {string}   type    Event type to unbind
+         * @param {Function} handler Reference to the original callback function
+         */
         removeEvent: function (elm, type, handler) {
             var handlerRef;
 

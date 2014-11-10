@@ -14,8 +14,9 @@ window.onload = (function() {
 		submitBtn = UTILS.qs('.btn.btn__submit-form'),
 		cancelFormBtn = UTILS.qs('.link.cancel-form'),
 		inputFieldsQr = UTILS.qsa('.settings-field.js-qr'),
+		inputTypeURL = UTILS.qsa('input[type="url"]'),
 		inputTypeText = UTILS.qsa('input[type="text"]'),
-		collectInputObj = {},
+		collectInputArray = [],
 		qrIframeContainer = UTILS.qs('.tab-content-body--iframe'),
 		notificationMsg = notification.childNodes[1],
 		mtfIframe = UTILS.qs('.js-mtfIframe');
@@ -51,6 +52,19 @@ window.onload = (function() {
 		nodeElm.setAttribute('aria-hidden', 'true');
 		nodeElm.removeAttribute('aria-selected');
 		return nodeElm;
+	};
+
+	var isValidURL =  function(urlStr) {
+	  var pattern = /(ftp|http|https):\/\/(\w+:{0,1}\w*@)?(\S+)(:[0-9]+)?(\/|\/([\w#!:.?+=&%@!\-\/]))?/;
+	  return pattern.test(urlStr);
+	  // var index = urlStr.indexOf('http://') > -1 ? urlStr.indexOf('http://') : urlStr.indexOf('https://');
+	  // if(index > -1){
+	  // 	if(urlStr.indexOf('.', index + 7) > -1){
+	  // 		return true;
+	  // 	} else {
+	  // 		return false;
+	  // 	}
+	  // }
 	};
 
 	// Initialize if class hidden exists for the qrSettings & mtfSettings toggle
@@ -106,6 +120,7 @@ window.onload = (function() {
 			mtfSettings.classList.remove('hidden');
 			qrSettingsClass = false;
 			mtfClass = false;
+			inputFieldsQr[0].focus();
 		} else {
 			this.classList.remove('active');
 			qrSettings.classList.add('hidden');
@@ -119,31 +134,61 @@ window.onload = (function() {
 		e.preventDefault();
 		qrSettings.classList.add('hidden');
 		qrSettingsBtn.classList.remove('active');
-
+		qrSettingsClass = true;
+		mtfClass = true;
 	};
 
 	var saveInput = function(e){
 		e.preventDefault();
-		console.log(inputTypeText);
+		var isValid = true;
+		// to make sure the array is empty every iteration
+		collectInputArray.length = 0;
 
-		for (var i = 0; i < inputFieldsQr.length; i++) {
-			var fieldValue = inputFieldsQr[i].value;
-			var strID = inputFieldsQr[i].id;
-			strID =strID.slice((-2));
+		for (var i = 0; i < inputTypeText.length; i++) {
+			var textInput = inputTypeText[i],
+			    textValue = inputTypeText[i].value,
+			    urlInput = inputTypeURL[i],
+			    urlValue = inputTypeURL[i].value,
+			    firstError = null;
 
-			console.log(inputFieldsQr[i].type);
-			console.log(strID);
+			    if(textValue === '' || urlValue === ''){
 
+			    	if (firstError === null){
+			          firstError = i;
+			        }
 
-			// if(inputFieldsQr[i].type === 'type'){
-			// 	collectInputObj[fieldValue];
-			// }
+			        if (firstError === i) {
+    		          textInput.focus();
+    		        }
 
-			// if(inputFieldsQr[i].type === 'url'){
-			// 	collectInputObj[fieldValue] = fieldValue;
-			// }
+			    	textInput.classList.add('error');
+			    	urlInput.classList.add('error');
+			    	isValid = false;
 
-		}
+			    	console.log('both empry');
+			    } else {
+			    	textInput.classList.remove('error');
+			    	urlInput.classList.remove('error');
+			    	isValid = true;
+			    }
+
+			    if(textValue !== '' || urlValue !== ''){
+				    if(textValue === ''){
+						textInput.classList.add('error');
+						isValid = false;
+				    }
+
+				    if(urlValue === '' || (!isValidURL(urlValue))){
+				    	urlInput.classList.add('error');
+				    	isValid = false;
+				    }
+				    if(isValid){
+						collectInputArray.push({name:textValue, url: urlValue});
+				    }
+			    }
+
+			}
+			    console.log(collectInputArray);
 	};
 
 	setTab();
