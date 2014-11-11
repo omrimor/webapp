@@ -10,7 +10,8 @@ window.onload = (function() {
 		mtfSettingsBtn = UTILS.qs('.js-mtfBtnSettings'),
 		notification = UTILS.qs('.notifications'),
 		openInNewTabIcon  = UTILS.qs('.action-btn.expand'),
-		selectBox = UTILS.qs('.select--choose-iframe'),
+		selectBoxContainer = UTILS.qs('.select--choose-iframe'),
+		selectBox = UTILS.qs('#choose-iframe-select'),
 		submitBtn = UTILS.qs('.btn.btn__submit-form'),
 		cancelFormBtn = UTILS.qs('.link.cancel-form'),
 		inputFieldsQr = UTILS.qsa('.settings-field.js-qr'),
@@ -23,7 +24,7 @@ window.onload = (function() {
 
 	openInNewTabIcon.classList.add('hidden');
 	notification.classList.add('hidden');
-	selectBox.classList.add('hidden');
+	selectBoxContainer.classList.add('hidden');
 	qrIframeContainer.classList.add('hidden');
 
 	var getElmAttribute = function(elm){
@@ -57,14 +58,6 @@ window.onload = (function() {
 	var isValidURL =  function(urlStr) {
 	  var pattern = /(ftp|http|https):\/\/(\w+:{0,1}\w*@)?(\S+)(:[0-9]+)?(\/|\/([\w#!:.?+=&%@!\-\/]))?/;
 	  return pattern.test(urlStr);
-	  // var index = urlStr.indexOf('http://') > -1 ? urlStr.indexOf('http://') : urlStr.indexOf('https://');
-	  // if(index > -1){
-	  // 	if(urlStr.indexOf('.', index + 7) > -1){
-	  // 		return true;
-	  // 	} else {
-	  // 		return false;
-	  // 	}
-	  // }
 	};
 
 	// Initialize if class hidden exists for the qrSettings & mtfSettings toggle
@@ -111,6 +104,16 @@ window.onload = (function() {
 		}
 	};
 
+	var escToClose = function(e){
+		var target = e.target;
+		if(e.keyCode === 27){
+			qrSettings.classList.add('hidden');
+			qrSettingsBtn.classList.remove('active');
+			qrSettingsClass = true;
+			mtfClass = true;
+		}
+	};
+
 	var toggleSettings = function(e){
 		e.preventDefault();
 
@@ -141,54 +144,69 @@ window.onload = (function() {
 	var saveInput = function(e){
 		e.preventDefault();
 		var isValid = true;
-		// to make sure the array is empty every iteration
+		// To make sure the array is empty on every iteration
 		collectInputArray.length = 0;
-
+		// To make sure the select box is empty on every iteration
+		while (selectBox.firstChild) {
+		    selectBox.removeChild(selectBox.firstChild);
+		}
+		// Running on i will get same place for text and url inputs
 		for (var i = 0; i < inputTypeText.length; i++) {
 			var textInput = inputTypeText[i],
 			    textValue = inputTypeText[i].value,
 			    urlInput = inputTypeURL[i],
-			    urlValue = inputTypeURL[i].value,
-			    firstError = null;
+			    urlValue = inputTypeURL[i].value;
 
-			    if(textValue === '' || urlValue === ''){
-
-			    	if (firstError === null){
-			          firstError = i;
-			        }
-
-			        if (firstError === i) {
-    		          textInput.focus();
-    		        }
+			    // If both fields are empty & they're the first two
+			    if((textValue === '' || urlValue === '') && i === 0){
+			    	if(textValue === ''){
+			    		textInput.focus();
+			    	}
+			    	else if(urlValue === ''){
+			    		urlInput.focus();
+			    	}
 
 			    	textInput.classList.add('error');
 			    	urlInput.classList.add('error');
 			    	isValid = false;
 
-			    	console.log('both empry');
 			    } else {
 			    	textInput.classList.remove('error');
 			    	urlInput.classList.remove('error');
-			    	isValid = true;
 			    }
 
+			    // If either fields has content - validate them
 			    if(textValue !== '' || urlValue !== ''){
-				    if(textValue === ''){
-						textInput.classList.add('error');
-						isValid = false;
-				    }
 
+				    if(textValue !== ''){
+				    	textInput.classList.remove('error');
+				    }
 				    if(urlValue === '' || (!isValidURL(urlValue))){
 				    	urlInput.classList.add('error');
 				    	isValid = false;
 				    }
+
 				    if(isValid){
 						collectInputArray.push({name:textValue, url: urlValue});
+						qrSettings.classList.add('hidden');
+						qrSettingsBtn.classList.remove('active');
+						qrSettingsClass = true;
+						mtfClass = true;
+
+						// Create an option Node with array[i] content and append to selectBox
+						var option = document.createElement('option');
+						option.textContent = collectInputArray[i].name;
+						option.value = collectInputArray[i].url;
+						selectBox.appendChild(option);
+					    console.log(selectBox);
+
+						// Show the selectBox, open in new tab icon and the iframe
+						openInNewTabIcon.classList.remove('hidden');
+						selectBoxContainer.classList.remove('hidden');
+						qrIframeContainer.classList.remove('hidden');
 				    }
 			    }
-
 			}
-			    console.log(collectInputArray);
 	};
 
 	setTab();
@@ -200,6 +218,7 @@ window.onload = (function() {
 	UTILS.addEvent(window, 'hashchange', setTab);
 	UTILS.addEvent(cancelFormBtn, 'click', closeForm);
 	UTILS.addEvent(submitBtn, 'click', saveInput);
+	UTILS.addEvent(qrSettings, 'keyup', escToClose);
 
 	UTILS.ajax('../webapp/data/notification.txt', {
 		done: function(response) {
