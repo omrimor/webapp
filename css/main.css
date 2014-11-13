@@ -673,6 +673,10 @@ nav {
     padding: 0 1.515151515%;
 }
 
+.disabled-option {
+    display: none;
+}
+
 /* ==========================================================================
    EXAMPLE Media Queries for Responsive Design.
    These examples override the primary ('mobile first') styles.

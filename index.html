@@ -32,7 +32,7 @@
     </header>
 
     <div class="layout-wrap page-body cf" role="main">
-        <div class="notifications">
+        <div class="notifications hidden">
             <span></span>
         </div>
 
@@ -100,18 +100,18 @@
             </ul>
             <div role="tabpanel" class="tab-content" id="quick-reports">
                 <div class="content-wrap cf">
-                    <div class="tab-content-settings js-qrTabSettings">
+                    <div class="tab-content-settings" data-settings="qrSettings">
                         <form action="">
                         <div class="tab-content-settings--input-container cf">
                             <fieldset>
                                     <span class="fs-name">Report 01</span>
                                     <div class="input-wrap">
                                         <label class="input-name" for="name01">Name:</label>
-                                        <input class="settings-field js-qr" type="text" id="name01">
+                                        <input class="settings-field" type="text" id="name01">
                                     </div>
                                     <div class="input-wrap">
                                         <label class="input-name" for="url01">URL:</label>
-                                        <input class="settings-field js-qr" type="url" id="url01">
+                                        <input class="settings-field" type="url" id="url01">
                                     </div>
                             </fieldset>
                         </div>
@@ -119,59 +119,55 @@
                                     <span class="fs-name">Report 02</span>
                                     <div class="input-wrap">
                                         <label class="input-name" for="name02">Name:</label>
-                                        <input class="settings-field js-qr" type="text" id="name02">
+                                        <input class="settings-field" type="text" id="name02">
                                     </div>
                                     <div class="input-wrap">
                                         <label class="input-name" for="url02">URL:</label>
-                                        <input class="settings-field js-qr" type="url" id="url02">
+                                        <input class="settings-field" type="url" id="url02">
                                     </div>
                             </fieldset>
                             <fieldset class="tab-content-settings--input-container">
                                     <span class="fs-name">Report 03</span>
                                     <div class="input-wrap">
                                         <label class="input-name" for="name03">Name:</label>
-                                        <input class="settings-field js-qr" type="text" id="name03">
+                                        <input class="settings-field" type="text" id="name03">
                                     </div>
                                     <div class="input-wrap">
                                         <label class="input-name" for="url03">URL:</label>
-                                        <input class="settings-field js-qr" type="url" id="url03">
+                                        <input class="settings-field" type="url" id="url03">
                                     </div>
                             </fieldset>
                             <div class="settings-footer">
-                            <a href="#" class="link cancel-form">cancel</a>
-                                <button type="submit" class="btn btn__submit-form">save</button>
+                            <a href="#" class="link cancel-form" data-link="qrSettings">cancel</a>
+                                <button type="submit" class="btn btn__submit-form" data-form="qrSettings">save</button>
                             </div>
                         </form>
                     </div>
                     <div class="tab-content-header">
-                        <div class="select--choose-iframe">
-                            <select name="choose-iframe" id="choose-iframe-select">
-<!--                                 <option value="netcraft">netcraft</option>
-                                <option value="ynet">ynet</option>
-                                <option value="blaa">blaa</option>
- -->                            </select>
+                        <div class="select--choose-iframe hidden" data-selectContainer="qrSettings">
+                            <select name="choose-iframe" class="choose-iframe-select" data-select="qrSettings"></select>
                         </div>
-                        <a class="action-btn expand" href="#">expand</a>
-                        <a class="action-btn settings active js-qrBtnSettings" href="#">settings</a>
+                        <a class="action-btn expand hidden" href="#" data-expand="qrSettings">expand</a>
+                        <a class="action-btn settings active" data-btn="qrSettings" href="#">settings</a>
                     </div>
                     <div class="tab-content-body">
-                        <iframe class="tab-content-body--iframe" src="http://www.netcraft.co.il/" frameborder="0"></iframe>
+                        <iframe class="tab-content-body--iframe" frameborder="0" data-iframe="qrSettings"></iframe>
                     </div>
                 </div>
             </div>
             <div role="tabpanel" class="tab-content" id="fmy-folders">
                 <div class="content-wrap cf">
                     <div class="tab-content-header">
-                        <a class="action-btn expand stand__alone" href="#">expand</a>
+                        <a class="action-btn expand stand__alone" href="#" data-expand="generic">expand</a>
                     </div>
                     <div class="tab-content-body">
-                        <iframe class="tab-content-body--iframe" src="http://www.paulirish.com/" frameborder="0"></iframe>
+                        <iframe class="tab-content-body--iframe" src="http://www.paulirish.com/" frameborder="0" data-iframe="generic"></iframe>
                     </div>
                 </div>
             </div>
             <div role="tabpanel" class="tab-content" id="my-team-folders">
                 <div class="content-wrap cf">
-                    <div class="tab-content-settings js-mtfTabSettings">
+                    <div class="tab-content-settings" data-settings="mtfSettings">
                         <form action="">
                             <fieldset class="tab-content-settings--input-container cf">
                                     <span class="fs-name">Report 01</span>
@@ -207,41 +203,35 @@
                                     </div>
                             </fieldset>
                             <div class="settings-footer">
-                            <a href="#" class="link cancel-form">cancel</a>
-                                <button type="submit" class="btn btn__submit-form">save</button>
+                            <a href="#" class="link cancel-form" data-link="mtfSettings">cancel</a>
+                                <button type="submit" class="btn btn__submit-form" data-form="mtfSettings">save</button>
                             </div>
                         </form>
                     </div>
                     <div class="tab-content-header">
-                        <div class="select--choose-iframe">
-                            <select name="choose-iframe" id="choose-iframe-select">
-                                <option value="netcraft">netcraft</option>
-                                <option value="ynet">ynet</option>
-                                <option value="blaa">blaa</option>
-                            </select>
+                        <div class="select--choose-iframe hidden" data-selectContainer="mtfSettings">
+                            <select name="choose-iframe" class="choose-iframe-select" data-select="mtfSettings"></select>
                         </div>
-                        <a class="action-btn expand" href="#">expand</a>
-                        <a class="action-btn settings js-mtfBtnSettings" href="#">settings</a>
+                        <a class="action-btn expand hidden" href="#" data-expand="mtfSettings">expand</a>
+                        <a class="action-btn settings active" href="#" data-btn="mtfSettings">settings</a>
                     </div>
                     <div class="tab-content-body">
-                        <iframe class="tab-content-body--iframe js-mtfIframe" src="http://www.netcraft.co.il/" frameborder="0"></iframe>
+                        <iframe class="tab-content-body--iframe js-mtfIframe" frameborder="0" data-iframe="mtfSettings"></iframe>
                     </div>
                 </div>
             </div>
             <div role="tabpanel" class="tab-content" id="public-folders">
                 <div class="content-wrap cf">
                     <div class="tab-content-header">
-                        <a class="action-btn expand stand__alone" href="#">expand</a>
+                        <a class="action-btn expand stand__alone" href="#" data-expand="generic">expand</a>
                     </div>
                     <div class="tab-content-body">
-                        <iframe class="tab-content-body--iframe" src="https://news.layervault.com/" frameborder="0"></iframe>
+                        <iframe class="tab-content-body--iframe" src="https://news.layervault.com/" frameborder="0" data-iframe="generic"></iframe>
                     </div>
                 </div>
             </div>
         </div>
         </div>
-        <script src="//ajax.googleapis.com/ajax/libs/jquery/{{JQUERY_VERSION}}/jquery.min.js"></script>
-        <script>window.jQuery || document.write('<script src="js/vendor/jquery-{{JQUERY_VERSION}}.min.js"><\/script>')</script>
         <script src="js/plugins.js"></script>
         <script src="js/main.js"></script>
     </body>
