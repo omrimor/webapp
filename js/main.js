@@ -3,15 +3,11 @@
 window.onload = (function() {
 	var settings = UTILS.qsa('.tab-content-settings'),
 		tabContainer = UTILS.qs('.tab-headers'),
-		allTabs = UTILS.qsa('a[role="tab"]'),
 		SettingsBtn = UTILS.qsa('.action-btn.settings'),
-		notification = UTILS.qs('.notifications'),
 		openInNewTabIcon  = UTILS.qsa('.action-btn.expand'),
-		selectBoxContainer = UTILS.qsa('.select--choose-iframe'),
 		selectBox = UTILS.qsa('.choose-iframe-select'),
 		submitBtn = UTILS.qsa('.btn.btn__submit-form'),
-		cancelFormBtn = UTILS.qsa('.link.cancel-form'),
-		iframeContainer = UTILS.qsa('.tab-content-body--iframe');
+		cancelFormBtn = UTILS.qsa('.link.cancel-form');
 
 	// Define some helper functions
 	var getElmAttribute = function(elm, attr){
@@ -21,7 +17,6 @@ window.onload = (function() {
 			return elm.getAttribute(attr);
 		}
 	};
-
 
 	var hasClass = function (element, cls) {
 	    return (' ' + element.className + ' ').indexOf(' ' + cls + ' ') > -1;
@@ -68,7 +63,8 @@ window.onload = (function() {
 
     // Event handlers functions
 	var setTab = function(){
-		var currentHash = location.hash.replace('panel-', '');
+		var currentHash = location.hash.replace('panel-', ''),
+			allTabs = UTILS.qsa('a[role="tab"]');
 
 		if (currentHash === '') {
 			currentHash =  allTabs[0].getAttribute('href');
@@ -161,8 +157,13 @@ window.onload = (function() {
 			currentIframeContainer = UTILS.qs('[data-iframe="' + dataAttr + '"]'),
 			currentOpenInNewTabIcon = UTILS.qs('[data-expand="' + dataAttr + '"]');
 
-		// To make sure the array is empty on every iteration
+		// Make sure the array is empty on every iteration
 		collectInputArray.length = 0;
+
+		// Make sure the select box is empty on every iteration
+		while (currentSelectElm.firstChild) {
+		    currentSelectElm.removeChild(currentSelectElm.firstChild);
+		}
 
 		if(collectInputArray.length === 0){
 			collectInputArray.length = 0;
@@ -171,12 +172,8 @@ window.onload = (function() {
 			currentOpenInNewTabIcon.classList.add('hidden');
 		}
 
-		// Make sure the select box is empty on every iteration
-		while (currentSelectElm.firstChild) {
-		    currentSelectElm.removeChild(currentSelectElm.firstChild);
-		}
 
-		// Running on i will get same place for text and url inputs
+		// Running on i will get same place for text & url inputs
 		for (var i = 0; i < inputTypeText.length; i++) {
 			var textInput = inputTypeText[i],
 			    textValue = inputTypeText[i].value,
@@ -279,7 +276,9 @@ window.onload = (function() {
 
 	UTILS.ajax('../webapp/data/notification.txt', {
 		done: function(response) {
-			var notificationMsg = notification.childNodes[1];
+			var notification = UTILS.qs('.notifications'),
+				notificationMsg = notification.childNodes[1];
+
 			notification.classList.remove('hidden');
 			notificationMsg.innerHTML = response;
 			console.log(response);

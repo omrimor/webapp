@@ -174,9 +174,6 @@ input[name="q"]:focus {
 }
 
 .page-body {
-    /*position: relative;*/
-    /*max-width: 1320px;*/
-    /*margin: 0 auto;*/
     background: rgba(0, 0, 0, 0.3);
 }
 
@@ -448,7 +445,6 @@ nav {
     right: 0;
 }
 
-
 .action-btn.settings {
     z-index: 50;
     background-image: url(../img/settings.png);
@@ -655,6 +651,10 @@ nav {
 .cf:after {
     clear: both;
 }
+
+/*
+ * Layout wrappers
+ */
 
 .layout-wrap {
     position: relative;
