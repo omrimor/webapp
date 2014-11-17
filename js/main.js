@@ -49,6 +49,7 @@ window.onload = (function() {
 	var isValidURL =  function(urlStr) {
 	  var pattern = /(ftp|http|https):\/\/(\w+:{0,1}\w*@)?(\S+)(:[0-9]+)?(\/|\/([\w#!:.?+=&%@!\-\/]))?/;
 	  return pattern.test(urlStr);
+	  // return true;
 	};
 
 	var superAddEvent = function(elm, type, handler){
@@ -83,6 +84,7 @@ window.onload = (function() {
 				addClass(currentActivePanel);
 			}
 		}
+
 	};
 
 	var changeHash = function(e){
@@ -96,6 +98,12 @@ window.onload = (function() {
 		}
 
 		location.hash = 'panel-' + tabAttr.replace('#', '');
+
+		// console.log('#' + tabAttr + ' input:first-child');
+		// 		if(UTILS.qs('#' + tabAttr + ' input:first-child')){
+		// 			UTILS.qs('#' + tabAttr + ' input:first-child').focus();
+		// 		}
+
 	};
 
 	var escToClose = function(e){
@@ -139,23 +147,23 @@ window.onload = (function() {
 		closeDiv.classList.add('hidden');
 		currentSettingBtn.classList.remove('active');
 		hasClass(closeDiv, 'hidden');
+
+		console.log('seyysdgfs');
 	};
 
 	var saveInput = function(e){
 		e.preventDefault();
-
 		var isValid = true,
 			target = e.target,
 			collectInputArray = [],
 			dataAttr = getElmAttribute(target, 'data-form'),
 			currentSettingBtn = UTILS.qs('[data-btn="' + dataAttr + '"]'),
-			inputTypeText = UTILS.qsa('[data-settings="' + dataAttr + '"] input[type="text"]'),
-			inputTypeURL = UTILS.qsa('[data-settings="' + dataAttr + '"] input[type="url"]'),
 			divContainer = UTILS.qs('[data-settings="' + dataAttr + '"]'),
 			currentSelectContainer = UTILS.qs('[data-selectContainer="' + dataAttr + '"]'),
 			currentSelectElm = UTILS.qs('[data-select="' + dataAttr + '"]'),
 			currentIframeContainer = UTILS.qs('[data-iframe="' + dataAttr + '"]'),
-			currentOpenInNewTabIcon = UTILS.qs('[data-expand="' + dataAttr + '"]');
+			currentOpenInNewTabIcon = UTILS.qs('[data-expand="' + dataAttr + '"]'),
+			fieldsets = UTILS.qsa('fieldset');
 
 		// Make sure the array is empty on every iteration
 		collectInputArray.length = 0;
@@ -164,7 +172,7 @@ window.onload = (function() {
 		while (currentSelectElm.firstChild) {
 		    currentSelectElm.removeChild(currentSelectElm.firstChild);
 		}
-
+		// If array is empty
 		if(collectInputArray.length === 0){
 			collectInputArray.length = 0;
 			currentSelectContainer.classList.add('hidden');
@@ -172,65 +180,69 @@ window.onload = (function() {
 			currentOpenInNewTabIcon.classList.add('hidden');
 		}
 
+		for (var i = 0; i < fieldsets.length; i++) {
+			var fieldset = fieldsets[i],
+			    inputTypeText = fieldset.getElementsByTagName('INPUT')[0],
+			    textValue = inputTypeText.value,
+			    inputTypeUrl = fieldset.getElementsByTagName('INPUT')[1],
+			    urlValue = inputTypeUrl.value;
 
-		// Running on i will get same place for text & url inputs
-		for (var i = 0; i < inputTypeText.length; i++) {
-			var textInput = inputTypeText[i],
-			    textValue = inputTypeText[i].value,
-			    urlInput = inputTypeURL[i],
-			    urlValue = inputTypeURL[i].value;
+		    // All fields are empty & the array is also empty so don't need to validate
+		    if((textValue === '' && urlValue === '') && collectInputArray.length === 0){
+		    	inputTypeText.classList.add('error');
+		    	inputTypeText.focus();
+		    	isValid = false;
+		    	break;
+		    }
 
-			    // If both fields are empty & they're the first two
-			    if((textValue === '' || urlValue === '') && i === 0){
-			    	if(textValue === ''){
-			    		textInput.focus();
-			    	}
-			    	else if(urlValue === ''){
-			    		urlInput.focus();
-			    	}
+    	    else {
+		    	inputTypeText.classList.remove('error');
+		    	inputTypeUrl.classList.remove('error');
 
-			    	textInput.classList.add('error');
-			    	urlInput.classList.add('error');
-			    	isValid = false;
+    	    	if (textValue === '' && urlValue !== '') {
+	    	    	inputTypeText.classList.add('error');
+	    	    	inputTypeText.focus();
+	    	    	isValid = false;
+	    	    	break;
+    	    	}
 
-			    } else {
-			    	textInput.classList.remove('error');
-			    	urlInput.classList.remove('error');
-			    }
+    	    	if ((urlValue === '' || !isValidURL(urlValue)) && textValue !== '') {
+	    	    	inputTypeUrl.classList.add('error');
+	    	    	inputTypeUrl.focus();
+	    	    	isValid = false;
+	    	    	break;
 
-			    // If either fields has content - validate them
-			    if(textValue !== '' || urlValue !== ''){
+    	    	}
 
-				    if(textValue !== ''){
-				    	textInput.classList.remove('error');
-				    }
-				    if(urlValue === '' || (!isValidURL(urlValue))){
-				    	urlInput.classList.add('error');
-				    	isValid = false;
-				    }
+    		    if(textValue !== '' && (isValidURL(urlValue))){
+    		    	inputTypeUrl.classList.remove('error');
+    		    	isValid = true;
+    		    }
 
-				    if(isValid){
-						collectInputArray.push({name:textValue, url: urlValue});
-						divContainer.classList.add('hidden');
-						currentSettingBtn.classList.remove('active');
-						hasClass(divContainer, 'hidden');
+	    		if(isValid){
+					collectInputArray.push({name:textValue, url: urlValue});
+					currentSettingBtn.classList.remove('active');
+					hasClass(divContainer, 'hidden');
 
-						// Create an option Node with array[i] content and append to selectBox
-						var option = document.createElement('option');
-						option.textContent = collectInputArray[i].name;
-						option.value = collectInputArray[i].url;
-						currentSelectElm.appendChild(option);
-
-						// Show the selectBox, open in new tab icon and the iframe
-						currentOpenInNewTabIcon.classList.remove('hidden');
-						currentSelectContainer.classList.remove('hidden');
-						currentIframeContainer.classList.remove('hidden');
-				    }
-			    }
+					// Create an option Node with array[i] content and append to selectBox
+					var option = document.createElement('option');
+					option.textContent = collectInputArray[i].name;
+					option.value = collectInputArray[i].url;
+					currentSelectElm.appendChild(option);
+					currentOpenInNewTabIcon.classList.remove('hidden');
+					currentSelectContainer.classList.remove('hidden');
+					currentIframeContainer.classList.remove('hidden');
+	    		}
 			}
-			if(isValid){
-				populateIframe(dataAttr);
-			}
+		}
+
+	    if(isValid){
+	    	divContainer.classList.add('hidden');
+	    }
+
+	    if(collectInputArray.length > 0){
+	    	populateIframe(dataAttr);
+	    }
 	};
 
 	var populateIframe = function(context){
