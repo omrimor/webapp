@@ -33,17 +33,32 @@ window.onload = (function() {
 	};
 
 	var addClass = function(nodeElm){
-		nodeElm.classList.add('active');
-		nodeElm.setAttribute('aria-selected', 'true');
-		nodeElm.removeAttribute('aria-hidden');
-		return nodeElm;
+		if(nodeElm.length !== undefined){
+			for (var i = 0; i < nodeElm.length; i++) {
+				nodeElm[i].classList.add('active');
+				nodeElm[i].setAttribute('aria-selected', 'true');
+				nodeElm[i].removeAttribute('aria-hidden');
+			}
+		}else {
+			nodeElm.classList.add('active');
+			nodeElm.setAttribute('aria-selected', 'true');
+			nodeElm.removeAttribute('aria-hidden');
+		}
 	};
 
+
 	var removeClass = function(nodeElm){
-		nodeElm.classList.remove('active');
-		nodeElm.setAttribute('aria-hidden', 'true');
-		nodeElm.removeAttribute('aria-selected');
-		return nodeElm;
+		if(nodeElm.length !== undefined){
+			for (var i = 0; i < nodeElm.length; i++) {
+				nodeElm[i].classList.remove('active');
+				nodeElm[i].setAttribute('aria-hidden', 'true');
+				nodeElm[i].removeAttribute('aria-selected');
+			}
+		}else {
+			nodeElm.classList.remove('active');
+			nodeElm.setAttribute('aria-hidden', 'true');
+			nodeElm.removeAttribute('aria-selected');
+		}
 	};
 
 	var isValidURL =  function(urlStr) {
@@ -63,47 +78,49 @@ window.onload = (function() {
 	};
 
     // Event handlers functions
-	var setTab = function(){
-		var currentHash = location.hash.replace('panel-', ''),
+	var getTab = function(){
+		var currentTab = UTILS.qs('li a[href="' + location.hash.replace('panel-', '') + '"]'),
 			allTabs = UTILS.qsa('a[role="tab"]');
 
-		if (currentHash === '') {
-			currentHash =  allTabs[0].getAttribute('href');
+		if (location.hash === '') {
+			currentTab =  allTabs[0];
 		}
 
-		for (var i = 0; i < allTabs.length; i++) {
-			var currentElm = allTabs[i],
-				currentElmAttr = getElmAttribute(currentElm, 'href'),
-				currentActivePanel = getMatchingPanel(currentElm);
-
-				removeClass(currentElm);
-				removeClass(currentActivePanel);
-
-			if(currentHash === ('#' + currentElmAttr)){
-				addClass(currentElm);
-				addClass(currentActivePanel);
-			}
-		}
-
+		// Pass the changeHash an object with a custom target property
+		changeHash({target:currentTab});
 	};
 
 	var changeHash = function(e){
-		e.preventDefault();
+		if(e.preventDefault){
+			e.preventDefault();
+		}
+
 		var clicked = e.target,
 			tabAttr = getElmAttribute(clicked, 'href'),
-			currentDiv = UTILS.qs('#' + tabAttr);
+			allTabs = UTILS.qsa('a[role="tab"]');
+
+		location.hash = 'panel-' + tabAttr.replace('#', '');
+
+	    var currentHash = location.hash.replace('panel-', '');
+
+	    removeClass(UTILS.qsa('div[role="tabpanel"]'));
+	    removeClass(UTILS.qsa('a[role="tab"]'));
+
+	    addClass(UTILS.qs('a[href="#' + tabAttr + '"]'));
+	    addClass(UTILS.qs('#' + tabAttr));
 
 		if (e.keyCode === 13 || e.keyCode === 32) {
 			location.hash = 'panel-' + tabAttr.replace('#', '');
 		}
 
-		location.hash = 'panel-' + tabAttr.replace('#', '');
-
-		// console.log('#' + tabAttr + ' input:first-child');
-		// 		if(UTILS.qs('#' + tabAttr + ' input:first-child')){
-		// 			UTILS.qs('#' + tabAttr + ' input:first-child').focus();
-		// 		}
-
+		// Make sure when a empty form exist in a form, set focus to first input
+		var firstInput = UTILS.qs('#' + tabAttr + ' input');
+		if(firstInput){
+			if(firstInput.value !== ''){
+				return;
+			}
+			firstInput.focus();
+		}
 	};
 
 	var escToClose = function(e){
@@ -153,7 +170,7 @@ window.onload = (function() {
 
 	var saveInput = function(e){
 		e.preventDefault();
-		var isValid = true,
+		var isValid = false,
 			target = e.target,
 			collectInputArray = [],
 			dataAttr = getElmAttribute(target, 'data-form'),
@@ -187,6 +204,9 @@ window.onload = (function() {
 			    inputTypeUrl = fieldset.getElementsByTagName('INPUT')[1],
 			    urlValue = inputTypeUrl.value;
 
+			// Reset the valid inside the If statment
+		    isValid = false;
+
 		    // All fields are empty & the array is also empty so don't need to validate
 		    if((textValue === '' && urlValue === '') && collectInputArray.length === 0){
 		    	inputTypeText.classList.add('error');
@@ -218,6 +238,7 @@ window.onload = (function() {
     		    	inputTypeUrl.classList.remove('error');
     		    	isValid = true;
     		    }
+    		    console.log(i, isValid, textValue, urlValue);
 
 	    		if(isValid){
 					collectInputArray.push({name:textValue, url: urlValue});
@@ -236,12 +257,9 @@ window.onload = (function() {
 			}
 		}
 
-	    if(isValid){
-	    	divContainer.classList.add('hidden');
-	    }
-
 	    if(collectInputArray.length > 0){
 	    	populateIframe(dataAttr);
+	    	divContainer.classList.add('hidden');
 	    }
 	};
 
@@ -275,10 +293,10 @@ window.onload = (function() {
 			}
 	};
 
-	setTab();
+	getTab();
 
 	UTILS.addEvent(tabContainer, 'click keypress', changeHash);
-	UTILS.addEvent(window, 'hashchange', setTab);
+	UTILS.addEvent(window, 'hashchange', getTab);
 	superAddEvent(SettingsBtn, 'click', toggleSettings);
 	superAddEvent(cancelFormBtn, 'click', closeForm);
 	superAddEvent(submitBtn, 'click', saveInput);
@@ -296,5 +314,6 @@ window.onload = (function() {
 			console.log(response);
 		}
 	});
+
 
 })();
