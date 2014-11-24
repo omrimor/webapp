@@ -25,9 +25,9 @@
       <div class="layout-wrap">
         <a class="logo" href="#">netcraft</a>
 
-        <form role="search" class="search-box" method="get" action="http://www.google.com">
+        <div role="search" class="search-box">
             <input type="search" name="q" placeholder="search">
-        </form>
+        </div>
       </div>
     </header>
 
@@ -89,16 +89,16 @@
 
         <div class="tabs" role="tablist">
             <ul class="tab-headers cf">
-                <li><a tabindex="1" role="tab" href="#quick-reports"><i class="fa fa-external-link"></i> Quick Reports</a>
+                <li><a role="tab" href="#quick-reports" data-link="qrSettings"><i class="fa fa-external-link"></i> Quick Reports</a>
                 </li>
-                <li><a tabindex="2" role="tab" href="#fmy-folders"><i class="fa fa-star-o"></i> My Folders</a>
+                <li><a role="tab" href="#fmy-folders"><i class="fa fa-star-o"></i> My Folders</a>
                 </li>
-                <li><a tabindex="3" role="tab" href="#my-team-folders"><i class="fa fa-folder-open-o"></i> My Team Folders</a>
+                <li><a role="tab" href="#my-team-folders" data-link="mtfSettings"><i class="fa fa-folder-open-o"></i> My Team Folders</a>
                 </li>
-                <li><a tabindex="4" role="tab" href="#public-folders"><i class="fa fa-file-o"></i> Public Folders</a>
+                <li><a role="tab" href="#public-folders"><i class="fa fa-file-o"></i> Public Folders</a>
                 </li>
             </ul>
-            <div role="tabpanel" class="tab-content" id="quick-reports">
+            <div role="tabpanel" class="tab-content" id="quick-reports" data-div="qrSettings">
                 <div class="content-wrap cf">
                     <div class="tab-content-settings" data-settings="qrSettings">
                         <form action="">
@@ -111,7 +111,7 @@
                                     </div>
                                     <div class="input-wrap">
                                         <label class="input-name" for="url01">URL:</label>
-                                        <input class="settings-field" type="url" id="url01">
+                                        <input class="settings-field" type="url" id="url01" placeholder="http://...">
                                     </div>
                             </fieldset>
                         </div>
@@ -123,7 +123,7 @@
                                     </div>
                                     <div class="input-wrap">
                                         <label class="input-name" for="url02">URL:</label>
-                                        <input class="settings-field" type="url" id="url02">
+                                        <input class="settings-field" type="url" id="url02" placeholder="http://...">
                                     </div>
                             </fieldset>
                             <fieldset class="tab-content-settings--input-container">
@@ -134,7 +134,7 @@
                                     </div>
                                     <div class="input-wrap">
                                         <label class="input-name" for="url03">URL:</label>
-                                        <input class="settings-field" type="url" id="url03">
+                                        <input class="settings-field" type="url" id="url03" placeholder="http://...">
                                     </div>
                             </fieldset>
                             <div class="settings-footer">
@@ -165,7 +165,7 @@
                     </div>
                 </div>
             </div>
-            <div role="tabpanel" class="tab-content" id="my-team-folders">
+            <div role="tabpanel" class="tab-content" id="my-team-folders" data-div="mtfSettings">
                 <div class="content-wrap cf">
                     <div class="tab-content-settings" data-settings="mtfSettings">
                         <form action="">
@@ -177,7 +177,7 @@
                                     </div>
                                     <div class="input-wrap">
                                         <label class="input-name" for="url01">URL:</label>
-                                        <input class="settings-field" type="url" id="url01">
+                                        <input class="settings-field" type="url" id="url01" placeholder="http://...">
                                     </div>
                             </fieldset>
                             <fieldset class="tab-content-settings--input-container">
@@ -188,7 +188,7 @@
                                     </div>
                                     <div class="input-wrap">
                                         <label class="input-name" for="url02">URL:</label>
-                                        <input class="settings-field" type="url" id="url02">
+                                        <input class="settings-field" type="url" id="url02" placeholder="http://...">
                                     </div>
                             </fieldset>
                             <fieldset class="tab-content-settings--input-container">
@@ -199,7 +199,7 @@
                                     </div>
                                     <div class="input-wrap">
                                         <label class="input-name" for="url03">URL:</label>
-                                        <input class="settings-field" type="url" id="url03">
+                                        <input class="settings-field" type="url" id="url03" placeholder="http://...">
                                     </div>
                             </fieldset>
                             <div class="settings-footer">
@@ -232,6 +232,7 @@
             </div>
         </div>
         </div>
+        <script src="js/vendor/classList.js"></script>
         <script src="js/plugins.js"></script>
         <script src="js/main.js"></script>
     </body>

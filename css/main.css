@@ -151,6 +151,7 @@ header {
     text-indent: -9999px;
     width: 148px;
     height: 30px;
+    background: url(../img/logo-netcraft.png) no-repeat top left;
     background: url(../img/logo-netcraft.svg) no-repeat top left;
 }
 
@@ -198,7 +199,7 @@ nav {
     float: left;
     width: 31.5625%;
     height: 160px;
-    margin-right: 2.65625%;
+    margin-left: 2.65625%;
     background-color: #000;
     -webkit-transition: all .5s ease;
        -moz-transition: all .5s ease;
@@ -212,8 +213,8 @@ nav {
     overflow: inherit;
 }
 
-.nav-section:last-child {
-    margin-right: 0;
+.nav-section:first-child {
+    margin-left: 0;
 }
 
 .nav-section > p {
@@ -346,14 +347,14 @@ nav {
     float: left;
     width: 22.96785%;
     height: 50px;
-    margin-right: 2.65625%;
+    margin-left: 2.65625%;
     line-height: 50px;
     text-align: center;
     font-size: .8rem;
 }
 
-.tab-headers li:last-child {
-    margin-right: 0;
+.tab-headers li:first-child {
+    margin-left: 0;
 }
 
 .tab-headers li > a {
@@ -461,6 +462,7 @@ nav {
 .tab-content-body--iframe {
     width: 100%;
     height: 1000px;
+    background-color: ##ebebeb;
 }
 
 .tab-content-settings {

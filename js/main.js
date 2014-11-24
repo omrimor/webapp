@@ -3,11 +3,15 @@
 window.onload = (function() {
 	var settings = UTILS.qsa('.tab-content-settings'),
 		tabContainer = UTILS.qs('.tab-headers'),
+		searchBox = UTILS.qs('input[name="q"]'),
 		SettingsBtn = UTILS.qsa('.action-btn.settings'),
 		openInNewTabIcon  = UTILS.qsa('.action-btn.expand'),
 		selectBox = UTILS.qsa('.choose-iframe-select'),
 		submitBtn = UTILS.qsa('.btn.btn__submit-form'),
-		cancelFormBtn = UTILS.qsa('.link.cancel-form');
+		cancelFormBtn = UTILS.qsa('.link.cancel-form'),
+		notification = UTILS.qs('.notifications'),
+		notificationMsg = notification.childNodes[1];
+
 
 	// Define some helper functions
 	var getElmAttribute = function(elm, attr){
@@ -62,9 +66,10 @@ window.onload = (function() {
 	};
 
 	var isValidURL =  function(urlStr) {
-	  var pattern = /(ftp|http|https):\/\/(\w+:{0,1}\w*@)?(\S+)(:[0-9]+)?(\/|\/([\w#!:.?+=&%@!\-\/]))?/;
+	  var pattern = /(([a-z]{4,6}:\/\/)|(^|\s))([a-zA-Z0-9\-]+\.)+[a-z]{2,13}[\.\?\=\&\%\/\w\-]*\b([^@]|$)/;
+	  // var pattern = /(http|https):\/\/(\w+:{0,1}\w*@)?(\S+)(:[0-9]+)?(\/|\/([\w#!:.?+=&%@!\-\/]))?/;
+
 	  return pattern.test(urlStr);
-	  // return true;
 	};
 
 	var superAddEvent = function(elm, type, handler){
@@ -78,6 +83,54 @@ window.onload = (function() {
 	};
 
     // Event handlers functions
+
+    var findReports = function(e){
+    	e.preventDefault();
+    	var searchVal = e.target.value,
+	    	isValid = false;
+
+    	if (e.keyCode === 13) {
+			for (var j = 0; j < selectBox.length; j++) {
+				var singleSelectBox = selectBox[j],
+					singleOptions = singleSelectBox.options,
+					dataAttr = getElmAttribute(singleSelectBox, 'data-select'),
+					currentIframeContainer = UTILS.qs('[data-iframe="' + dataAttr + '"]');
+
+				for (var i = 0; i < singleOptions.length; i++) {
+					var optionTxt = singleOptions[i].text,
+						optionVal = singleOptions[i].value;
+
+					if(optionTxt === searchVal){
+
+						removeClass(UTILS.qsa('div[role="tabpanel"]'));
+						removeClass(UTILS.qsa('a[role="tab"]'));
+
+						addClass(UTILS.qs('[data-link="' + dataAttr + '"]'));
+						addClass(UTILS.qs('[data-div="' + dataAttr + '"]'));
+						singleOptions.selectedIndex = i;
+						currentIframeContainer.src = optionVal;
+						isValid = true;
+
+						// Break the loop to exit if first value found
+						j = selectBox.length;
+						break;
+					}
+				}
+			}
+			// If no match to search value
+			if(!isValid){
+				if(hasClass(notification, 'hidden')){
+					notification.classList.remove('hidden');
+					notificationMsg.innerHTML = 'The searched report ' + searchVal + ' was not found';
+				}
+				else {
+					notificationMsg.innerHTML = 'The searched report ' + searchVal + ' was not found';
+				}
+			}
+    	}
+
+    };
+
 	var getTab = function(){
 		var currentTab = UTILS.qs('li a[href="' + location.hash.replace('panel-', '') + '"]'),
 			allTabs = UTILS.qsa('a[role="tab"]');
@@ -164,8 +217,6 @@ window.onload = (function() {
 		closeDiv.classList.add('hidden');
 		currentSettingBtn.classList.remove('active');
 		hasClass(closeDiv, 'hidden');
-
-		console.log('seyysdgfs');
 	};
 
 	var saveInput = function(e){
@@ -180,7 +231,7 @@ window.onload = (function() {
 			currentSelectElm = UTILS.qs('[data-select="' + dataAttr + '"]'),
 			currentIframeContainer = UTILS.qs('[data-iframe="' + dataAttr + '"]'),
 			currentOpenInNewTabIcon = UTILS.qs('[data-expand="' + dataAttr + '"]'),
-			fieldsets = UTILS.qsa('fieldset');
+			fieldsets = UTILS.qsa('[data-settings="' + dataAttr + '"] fieldset');
 
 		// Make sure the array is empty on every iteration
 		collectInputArray.length = 0;
@@ -207,7 +258,7 @@ window.onload = (function() {
 			// Reset the valid inside the If statment
 		    isValid = false;
 
-		    // All fields are empty & the array is also empty so don't need to validate
+		    // If all fields & the array are empty don't need to validate
 		    if((textValue === '' && urlValue === '') && collectInputArray.length === 0){
 		    	inputTypeText.classList.add('error');
 		    	inputTypeText.focus();
@@ -226,22 +277,28 @@ window.onload = (function() {
 	    	    	break;
     	    	}
 
+    	    	if(urlValue.indexOf('http://') !== 0){
+    	    		urlValue = 'http://' + urlValue;
+    	    	}
+
+		    	else if(urlValue.indexOf('https://') !== 0){
+		    		urlValue = 'https://' + urlValue;
+		    	}
+
     	    	if ((urlValue === '' || !isValidURL(urlValue)) && textValue !== '') {
 	    	    	inputTypeUrl.classList.add('error');
 	    	    	inputTypeUrl.focus();
 	    	    	isValid = false;
 	    	    	break;
-
     	    	}
 
     		    if(textValue !== '' && (isValidURL(urlValue))){
     		    	inputTypeUrl.classList.remove('error');
     		    	isValid = true;
     		    }
-    		    console.log(i, isValid, textValue, urlValue);
 
 	    		if(isValid){
-					collectInputArray.push({name:textValue, url: urlValue});
+					collectInputArray.push({name:textValue, url:urlValue});
 					currentSettingBtn.classList.remove('active');
 					hasClass(divContainer, 'hidden');
 
@@ -297,6 +354,7 @@ window.onload = (function() {
 
 	UTILS.addEvent(tabContainer, 'click keypress', changeHash);
 	UTILS.addEvent(window, 'hashchange', getTab);
+	UTILS.addEvent(searchBox, 'keyup', findReports);
 	superAddEvent(SettingsBtn, 'click', toggleSettings);
 	superAddEvent(cancelFormBtn, 'click', closeForm);
 	superAddEvent(submitBtn, 'click', saveInput);
@@ -306,14 +364,9 @@ window.onload = (function() {
 
 	UTILS.ajax('../webapp/data/notification.txt', {
 		done: function(response) {
-			var notification = UTILS.qs('.notifications'),
-				notificationMsg = notification.childNodes[1];
-
 			notification.classList.remove('hidden');
 			notificationMsg.innerHTML = response;
-			console.log(response);
 		}
 	});
-
 
 })();
