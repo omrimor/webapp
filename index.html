@@ -1,5 +1,5 @@
 <!doctype html>
-<html class="no-js" lang="">
+<html class="no-js" lang="" data-placeholder-focus="false">
     <head>
         <meta charset="utf-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -20,7 +20,7 @@
         <!--[if lt IE 8]>
             <p class="browserupgrade">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
         <![endif]-->
-
+        <!--[if lte IE 8]><img src="../img/body-background.jpg" class="ie8-bg"><![endif]-->
     <header>
       <div class="layout-wrap">
         <a class="logo" href="#">netcraft</a>
@@ -33,7 +33,7 @@
 
     <div class="layout-wrap page-body cf" role="main">
         <div class="notifications hidden">
-            <span></span>
+            <span data-span="notificationTxt"></span>
         </div>
 
         <nav class="cf" role="navigation">
@@ -151,7 +151,7 @@
                         <a class="action-btn settings active" data-btn="qrSettings" href="#">settings</a>
                     </div>
                     <div class="tab-content-body">
-                        <iframe class="tab-content-body--iframe" frameborder="0" data-iframe="qrSettings"></iframe>
+                        <iframe class="tab-content-body--iframe hidden" frameborder="0" data-iframe="qrSettings"></iframe>
                     </div>
                 </div>
             </div>
@@ -216,7 +216,7 @@
                         <a class="action-btn settings active" href="#" data-btn="mtfSettings">settings</a>
                     </div>
                     <div class="tab-content-body">
-                        <iframe class="tab-content-body--iframe js-mtfIframe" frameborder="0" data-iframe="mtfSettings"></iframe>
+                        <iframe class="tab-content-body--iframe js-mtfIframe hidden" frameborder="0" data-iframe="mtfSettings"></iframe>
                     </div>
                 </div>
             </div>
@@ -232,6 +232,7 @@
             </div>
         </div>
         </div>
+        <script src="js/vendor/placeholders.min.js"></script>
         <script src="js/vendor/classList.js"></script>
         <script src="js/plugins.js"></script>
         <script src="js/main.js"></script>

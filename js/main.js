@@ -10,7 +10,7 @@ window.onload = (function() {
 		submitBtn = UTILS.qsa('.btn.btn__submit-form'),
 		cancelFormBtn = UTILS.qsa('.link.cancel-form'),
 		notification = UTILS.qs('.notifications'),
-		notificationMsg = notification.childNodes[1];
+		notificationMsg = UTILS.qs('[data-span="notificationTxt"]');
 
 
 	// Define some helper functions
@@ -117,14 +117,13 @@ window.onload = (function() {
 					}
 				}
 			}
-			// If no match to search value
+			// If no match to search value - display message
 			if(!isValid){
 				if(hasClass(notification, 'hidden')){
 					notification.classList.remove('hidden');
-					notificationMsg.innerHTML = 'The searched report ' + searchVal + ' was not found';
-				}
-				else {
-					notificationMsg.innerHTML = 'The searched report ' + searchVal + ' was not found';
+					notificationMsg.innerHTML = 'The searched report <b>' + searchVal + '</b> was not found';
+				} else {
+					notificationMsg.innerHTML = 'The searched report <b>' + searchVal + '</b> was not found';
 				}
 			}
     	}
@@ -169,10 +168,11 @@ window.onload = (function() {
 		// Make sure when a empty form exist in a form, set focus to first input
 		var firstInput = UTILS.qs('#' + tabAttr + ' input');
 		if(firstInput){
-			if(firstInput.value !== ''){
-				return;
+			if(firstInput.value === ''){
+				firstInput.focus();
+			} else {
+				firstInput.blur();
 			}
-			firstInput.focus();
 		}
 	};
 
@@ -200,7 +200,6 @@ window.onload = (function() {
 		if (hasClass(toggleDiv, 'hidden')){
 			target.classList.add('active');
 			toggleDiv.classList.remove('hidden');
-			inputFieldsQr[0].focus();
 		} else {
 			target.classList.remove('active');
 			toggleDiv.classList.add('hidden');
@@ -222,6 +221,7 @@ window.onload = (function() {
 	var saveInput = function(e){
 		e.preventDefault();
 		var isValid = false,
+			isClosed = true,
 			target = e.target,
 			collectInputArray = [],
 			dataAttr = getElmAttribute(target, 'data-form'),
@@ -274,6 +274,7 @@ window.onload = (function() {
 	    	    	inputTypeText.classList.add('error');
 	    	    	inputTypeText.focus();
 	    	    	isValid = false;
+	    	    	isClosed = false;
 	    	    	break;
     	    	}
 
@@ -289,6 +290,7 @@ window.onload = (function() {
 	    	    	inputTypeUrl.classList.add('error');
 	    	    	inputTypeUrl.focus();
 	    	    	isValid = false;
+	    	    	isClosed = false;
 	    	    	break;
     	    	}
 
@@ -314,9 +316,13 @@ window.onload = (function() {
 			}
 		}
 
+		// If the array has at least one object
 	    if(collectInputArray.length > 0){
 	    	populateIframe(dataAttr);
-	    	divContainer.classList.add('hidden');
+
+	    	if(isClosed){
+		    	divContainer.classList.add('hidden');
+	    	}
 	    }
 	};
 
