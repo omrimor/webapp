@@ -1,8 +1,9 @@
-/* globals UTILS*/
+/* globals UTILS, Modernizr*/
 
 window.onload = (function() {
 	var settings = UTILS.qsa('.tab-content-settings'),
 		tabContainer = UTILS.qs('.tab-headers'),
+		tabList = UTILS.qs('[role="tablist"]'),
 		searchBox = UTILS.qs('input[name="q"]'),
 		SettingsBtn = UTILS.qsa('.action-btn.settings'),
 		openInNewTabIcon  = UTILS.qsa('.action-btn.expand'),
@@ -10,10 +11,13 @@ window.onload = (function() {
 		submitBtn = UTILS.qsa('.btn.btn__submit-form'),
 		cancelFormBtn = UTILS.qsa('.link.cancel-form'),
 		notification = UTILS.qs('.notifications'),
-		notificationMsg = UTILS.qs('[data-span="notificationTxt"]');
+		notificationMsg = UTILS.qs('[data-span="notificationTxt"]'),
+		reports = {};
 
+//===================================================================
+// Define helper functions
+//===================================================================
 
-	// Define some helper functions
 	var getElmAttribute = function(elm, attr){
 		if(attr === 'href'){
 		    return elm.getAttribute(attr).split('#')[1];
@@ -67,8 +71,6 @@ window.onload = (function() {
 
 	var isValidURL =  function(urlStr) {
 	  var pattern = /(([a-z]{4,6}:\/\/)|(^|\s))([a-zA-Z0-9\-]+\.)+[a-z]{2,13}[\.\?\=\&\%\/\w\-]*\b([^@]|$)/;
-	  // var pattern = /(http|https):\/\/(\w+:{0,1}\w*@)?(\S+)(:[0-9]+)?(\/|\/([\w#!:.?+=&%@!\-\/]))?/;
-
 	  return pattern.test(urlStr);
 	};
 
@@ -82,7 +84,58 @@ window.onload = (function() {
 		}
 	};
 
-    // Event handlers functions
+	var localStorageSupported = function(){
+		if (!Modernizr.localstorage) {
+			console.error('Your browser does not support localStorage');
+			return false;
+		}
+		return true;
+	};
+
+
+//===================================================================
+// Handler functions
+//===================================================================
+
+    var initReprots = function(){
+	    var savedData = localStorage.getItem('reports');
+
+	    // If no localStorage, we can't retrieve any data
+	    if (!localStorageSupported()) {
+	    	return false;
+	    }
+
+	    try {
+	    	savedData = JSON.parse(savedData);
+	    	if(savedData){
+		    	reports = savedData;
+	    	}
+
+	    } catch (e) {
+	    	console.error('The saved data was not in a valid JSON format');
+	    	return false;
+	    }
+
+	    // For each saved report
+	    for (var inx in savedData) {
+
+	    	// Prevent iterating inherited properties
+	    	if (savedData.hasOwnProperty(inx)) {
+
+	    		var name = UTILS.qsa('[data-settings="' + inx + '"] fieldset [type="text"]'),
+	    		    url = UTILS.qsa('[data-settings="' + inx + '"] fieldset [type="url"]');
+
+			    for(var i = 0; i < savedData[inx].length; i++){
+			    	if(name[i] && url[i]){
+			    		name[i].value = savedData[inx][i].name;
+			    		url[i].value = savedData[inx][i].url;
+			    	}
+			    }
+			    // Pass the saveInput function context
+				saveInput({target: UTILS.qs('[data-form="' + inx + '"]')});
+	    	}
+	    }
+    };
 
     var findReports = function(e){
     	e.preventDefault();
@@ -98,9 +151,14 @@ window.onload = (function() {
 
 				for (var i = 0; i < singleOptions.length; i++) {
 					var optionTxt = singleOptions[i].text,
-						optionVal = singleOptions[i].value;
+						result = optionTxt.indexOf(searchVal);
 
-					if(optionTxt === searchVal){
+						var optionVal = singleOptions[i].value;
+
+						console.log(optionTxt, searchVal);
+						console.log('found: ' + result);
+
+					if(result > -1){
 
 						removeClass(UTILS.qsa('div[role="tabpanel"]'));
 						removeClass(UTILS.qsa('a[role="tab"]'));
@@ -121,6 +179,9 @@ window.onload = (function() {
 			if(!isValid){
 				if(hasClass(notification, 'hidden')){
 					notification.classList.remove('hidden');
+
+					tabList.style.top = '330px';
+
 					notificationMsg.innerHTML = 'The searched report <b>' + searchVal + '</b> was not found';
 				} else {
 					notificationMsg.innerHTML = 'The searched report <b>' + searchVal + '</b> was not found';
@@ -138,7 +199,7 @@ window.onload = (function() {
 			currentTab =  allTabs[0];
 		}
 
-		// Pass the changeHash an object with a custom target property
+		// Pass the changeHash function context
 		changeHash({target:currentTab});
 	};
 
@@ -219,11 +280,13 @@ window.onload = (function() {
 	};
 
 	var saveInput = function(e){
-		e.preventDefault();
+		if(e.preventDefault){
+			e.preventDefault();
+		}
+
 		var isValid = false,
 			isClosed = true,
 			target = e.target,
-			collectInputArray = [],
 			dataAttr = getElmAttribute(target, 'data-form'),
 			currentSettingBtn = UTILS.qs('[data-btn="' + dataAttr + '"]'),
 			divContainer = UTILS.qs('[data-settings="' + dataAttr + '"]'),
@@ -231,18 +294,16 @@ window.onload = (function() {
 			currentSelectElm = UTILS.qs('[data-select="' + dataAttr + '"]'),
 			currentIframeContainer = UTILS.qs('[data-iframe="' + dataAttr + '"]'),
 			currentOpenInNewTabIcon = UTILS.qs('[data-expand="' + dataAttr + '"]'),
-			fieldsets = UTILS.qsa('[data-settings="' + dataAttr + '"] fieldset');
-
-		// Make sure the array is empty on every iteration
-		collectInputArray.length = 0;
+			fieldsets = UTILS.qsa('[data-settings="' + dataAttr + '"] fieldset'),
+			collectInputArray = [];
 
 		// Make sure the select box is empty on every iteration
 		while (currentSelectElm.firstChild) {
 		    currentSelectElm.removeChild(currentSelectElm.firstChild);
 		}
+
 		// If array is empty
 		if(collectInputArray.length === 0){
-			collectInputArray.length = 0;
 			currentSelectContainer.classList.add('hidden');
 			currentIframeContainer.classList.add('hidden');
 			currentOpenInNewTabIcon.classList.add('hidden');
@@ -255,7 +316,7 @@ window.onload = (function() {
 			    inputTypeUrl = fieldset.getElementsByTagName('INPUT')[1],
 			    urlValue = inputTypeUrl.value;
 
-			// Reset the valid inside the If statment
+			// Reset isValid inside the If statment
 		    isValid = false;
 
 		    // If all fields & the array are empty don't need to validate
@@ -278,13 +339,10 @@ window.onload = (function() {
 	    	    	break;
     	    	}
 
-    	    	if(urlValue.indexOf('http://') !== 0){
+    	    	// Add http prefix if omitted
+    	    	if(urlValue.indexOf('http://') === -1){
     	    		urlValue = 'http://' + urlValue;
     	    	}
-
-		    	else if(urlValue.indexOf('https://') !== 0){
-		    		urlValue = 'https://' + urlValue;
-		    	}
 
     	    	if ((urlValue === '' || !isValidURL(urlValue)) && textValue !== '') {
 	    	    	inputTypeUrl.classList.add('error');
@@ -309,6 +367,7 @@ window.onload = (function() {
 					option.textContent = collectInputArray[i].name;
 					option.value = collectInputArray[i].url;
 					currentSelectElm.appendChild(option);
+
 					currentOpenInNewTabIcon.classList.remove('hidden');
 					currentSelectContainer.classList.remove('hidden');
 					currentIframeContainer.classList.remove('hidden');
@@ -318,8 +377,19 @@ window.onload = (function() {
 
 		// If the array has at least one object
 	    if(collectInputArray.length > 0){
+	    	// If localStorage is supported:
+	    	// 1. Give reports a key based on form ID
+	    	// 2. Set the localStorageObject
+
+	    	if (localStorageSupported()) {
+	    		// Save it in localStorage, as a string
+				reports[dataAttr] = collectInputArray;
+				localStorage.setItem('reports', JSON.stringify(reports));
+	    	}
+
 	    	populateIframe(dataAttr);
 
+	    	// Close the containing form div
 	    	if(isClosed){
 		    	divContainer.classList.add('hidden');
 	    	}
@@ -327,7 +397,7 @@ window.onload = (function() {
 	};
 
 	var populateIframe = function(context){
-		// Change the default context 'e' of the listener function
+		// Change the default event context
 		if(typeof context === 'object'){
 			context = getElmAttribute(context.target, 'data-select');
 		}
@@ -357,6 +427,11 @@ window.onload = (function() {
 	};
 
 	getTab();
+	initReprots();
+
+//===================================================================
+// Event handlers
+//===================================================================
 
 	UTILS.addEvent(tabContainer, 'click keypress', changeHash);
 	UTILS.addEvent(window, 'hashchange', getTab);
@@ -372,6 +447,7 @@ window.onload = (function() {
 		done: function(response) {
 			notification.classList.remove('hidden');
 			notificationMsg.innerHTML = response;
+			tabList.style.top = '330px';
 		}
 	});
 

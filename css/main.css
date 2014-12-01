@@ -26,6 +26,11 @@ html {
     color: #2c3e50;
 }
 
+html,
+body {
+    height: 100%;
+}
+
 /*
  * Remove text-shadow in selection highlight:
  * https://twitter.com/miketaylr/status/12228805301
@@ -151,9 +156,10 @@ body {
 }
 
 header {
-    position: relative;
+    position: absolute;
     z-index: 100;
-    width: 100%;
+    left: 0;
+    right: 0;
     background: #000;
     height: 75px;
 }
@@ -198,18 +204,22 @@ input[name="q"]:focus {
 
 
 .notifications {
+    position: relative;
     background: #ebebeb;
-    width: 100%;
+    width: 96.5%;
     height: 36px;
     padding: 0 1.5625%;
-    margin-top: 20px;
+    margin: 0 auto;
+    margin-bottom: 20px;
     line-height: 36px;
     font-size: .8rem;
 }
 
 nav {
+    position: relative;
+    margin: 0 auto;
     width: 100%;
-    margin: 20px 0;
+    padding: 0 1.515151515%;
 }
 
 .nav-section {
@@ -354,7 +364,11 @@ nav {
 }
 
 .tabs {
-    width: 100%;
+    position: absolute;
+    top: 270px;
+    left: 15px;
+    right: 15px;
+    bottom: 0;
 }
 
 .tab-headers {
@@ -395,6 +409,9 @@ nav {
 
 .tab-content {
     display: none;
+    position: absolute;
+    bottom: 0;
+    top: 50px;
     width: 100%;
     background: #ebebeb;
 }
@@ -472,7 +489,6 @@ nav {
 
 .tab-content-body {
     width: 100%;
-    min-height: 800px;
     position: relative;
     margin-top: 40px;
 }
@@ -677,12 +693,15 @@ nav {
  */
 
 .layout-wrap {
-    position: relative;
+    position: absolute;
+    left: 1.515151515%;
+    right: 1.515151515%;
     max-width: 1320px;
     min-width: 640px;
-    height: 100%;
+    bottom: 0;
+    top: 0;
     margin: 0 auto;
-    padding: 0 1.515151515%;
+    padding-top: 90px;
 }
 
 .content-wrap {
