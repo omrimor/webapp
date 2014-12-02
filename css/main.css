@@ -505,7 +505,7 @@ nav {
 }
 
 .tab-content-settings {
-    max-width: 1240px;
+    /*max-width: 1240px;*/
     min-width: 600px;
     position: absolute;
     top: 60px;
