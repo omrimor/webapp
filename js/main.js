@@ -98,7 +98,8 @@ window.onload = (function() {
 //===================================================================
 
     var initReprots = function(){
-	    var savedData = localStorage.getItem('reports');
+	    var savedData = localStorage.getItem('reports'),
+	    allForms = UTILS.qsa('form');
 
 	    // If no localStorage, we can't retrieve any data
 	    if (!localStorageSupported()) {
@@ -114,6 +115,13 @@ window.onload = (function() {
 	    } catch (e) {
 	    	console.error('The saved data was not in a valid JSON format');
 	    	return false;
+	    }
+
+	    for (var i = 0; i < allForms.length; i++) {
+	    	var inputs = allForms[i].getElementsByTagName('input');
+	    	for (var j = 0; j < inputs.length; j++) {
+	    		inputs[j].value = '';
+	    	}
 	    }
 
 	    // For each saved report
@@ -279,6 +287,12 @@ window.onload = (function() {
 		hasClass(closeDiv, 'hidden');
 	};
 
+	var cancelForm = function(e){
+		e.preventDefault();
+		initReprots();
+		closeForm(e);
+	};
+
 	var saveInput = function(e){
 		if(e.preventDefault){
 			e.preventDefault();
@@ -295,7 +309,8 @@ window.onload = (function() {
 			currentIframeContainer = UTILS.qs('[data-iframe="' + dataAttr + '"]'),
 			currentOpenInNewTabIcon = UTILS.qs('[data-expand="' + dataAttr + '"]'),
 			fieldsets = UTILS.qsa('[data-settings="' + dataAttr + '"] fieldset'),
-			collectInputArray = [];
+			collectInputArray = [],
+		    emptyCount = 0;
 
 		// Make sure the select box is empty on every iteration
 		while (currentSelectElm.firstChild) {
@@ -320,14 +335,18 @@ window.onload = (function() {
 		    isValid = false;
 
 		    // If all fields & the array are empty don't need to validate
-		    if((textValue === '' && urlValue === '') && collectInputArray.length === 0){
-		    	inputTypeText.classList.add('error');
-		    	inputTypeText.focus();
-		    	isValid = false;
-		    	break;
+		    if((textValue === '' && urlValue === '')){
+		    	emptyCount++;
+
+		    	if(emptyCount === fieldsets.length){
+			    	fieldsets[0].getElementsByTagName('INPUT')[0].classList.add('error');
+			    	fieldsets[0].getElementsByTagName('INPUT')[0].focus();
+			    	isValid = false;
+			    	localStorage.clear();
+		    	}
 		    }
 
-    	    else {
+    	    // else {
 		    	inputTypeText.classList.remove('error');
 		    	inputTypeUrl.classList.remove('error');
 
@@ -364,15 +383,15 @@ window.onload = (function() {
 
 					// Create an option Node with array[i] content and append to selectBox
 					var option = document.createElement('option');
-					option.textContent = collectInputArray[i].name;
-					option.value = collectInputArray[i].url;
+					option.textContent = textValue;
+					option.value = urlValue;
 					currentSelectElm.appendChild(option);
 
 					currentOpenInNewTabIcon.classList.remove('hidden');
 					currentSelectContainer.classList.remove('hidden');
 					currentIframeContainer.classList.remove('hidden');
 	    		}
-			}
+			// }
 		}
 
 		// If the array has at least one object
@@ -437,7 +456,7 @@ window.onload = (function() {
 	UTILS.addEvent(window, 'hashchange', getTab);
 	UTILS.addEvent(searchBox, 'keyup', findReports);
 	superAddEvent(SettingsBtn, 'click', toggleSettings);
-	superAddEvent(cancelFormBtn, 'click', closeForm);
+	superAddEvent(cancelFormBtn, 'click', cancelForm);
 	superAddEvent(submitBtn, 'click', saveInput);
 	superAddEvent(settings, 'keyup', escToClose);
 	superAddEvent(selectBox, 'change', populateIframe);
