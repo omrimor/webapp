@@ -18,6 +18,8 @@ window.onload = (function() {
 // Define helper functions
 //===================================================================
 
+
+
 	var getElmAttribute = function(elm, attr){
 		if(attr === 'href'){
 		    return elm.getAttribute(attr).split('#')[1];
