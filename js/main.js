@@ -18,8 +18,6 @@ window.onload = (function() {
 // Define helper functions
 //===================================================================
 
-
-
 	var getElmAttribute = function(elm, attr){
 		if(attr === 'href'){
 		    return elm.getAttribute(attr).split('#')[1];
@@ -36,11 +34,12 @@ window.onload = (function() {
 		hasClass(settings[i], 'hidden');
 	}
 
-	var getMatchingPanel = function(tab){
-		var tabAttr = getElmAttribute(tab, 'href'),
-			matchingPanel = document.getElementById(tabAttr);
-			return matchingPanel;
-	};
+
+	// var getMatchingPanel = function(tab){
+	// 	var tabAttr = getElmAttribute(tab, 'href'),
+	// 		matchingPanel = document.getElementById(tabAttr);
+	// 		return matchingPanel;
+	// };
 
 	var addClass = function(nodeElm){
 		if(nodeElm.length !== undefined){
@@ -55,7 +54,6 @@ window.onload = (function() {
 			nodeElm.removeAttribute('aria-hidden');
 		}
 	};
-
 
 	var removeClass = function(nodeElm){
 		if(nodeElm.length !== undefined){
@@ -219,12 +217,12 @@ window.onload = (function() {
 		}
 
 		var clicked = e.target,
-			tabAttr = getElmAttribute(clicked, 'href'),
-			allTabs = UTILS.qsa('a[role="tab"]');
+			tabAttr = getElmAttribute(clicked, 'href');
+			// allTabs = UTILS.qsa('a[role="tab"]');
 
 		location.hash = 'panel-' + tabAttr.replace('#', '');
 
-	    var currentHash = location.hash.replace('panel-', '');
+	    // var currentHash = location.hash.replace('panel-', '');
 
 	    removeClass(UTILS.qsa('div[role="tabpanel"]'));
 	    removeClass(UTILS.qsa('a[role="tab"]'));
@@ -265,8 +263,8 @@ window.onload = (function() {
 		e.preventDefault();
 		var target = e.target,
 			dataAttr = getElmAttribute(target, 'data-btn'),
-			toggleDiv = UTILS.qs('[data-settings="' + dataAttr + '"]'),
-			inputFieldsQr = UTILS.qsa('.settings-field');
+			toggleDiv = UTILS.qs('[data-settings="' + dataAttr + '"]');
+			// inputFieldsQr = UTILS.qsa('.settings-field');
 
 		if (hasClass(toggleDiv, 'hidden')){
 			target.classList.add('active');
@@ -348,67 +346,73 @@ window.onload = (function() {
 		    	}
 		    }
 
-    	    // else {
-		    	inputTypeText.classList.remove('error');
+	    	inputTypeText.classList.remove('error');
+	    	inputTypeUrl.classList.remove('error');
+
+	    	if (textValue === '' && urlValue !== '') {
+    	    	inputTypeText.classList.add('error');
+    	    	inputTypeText.focus();
+    	    	isValid = false;
+    	    	isClosed = false;
+    	    	break;
+	    	}
+
+	    	// Add http prefix if omitted
+	    	if(urlValue !== ''){
+		    	if(urlValue.indexOf('http://') === -1){
+		    		urlValue = 'http://' + urlValue;
+		    	}
+	    	}
+
+	    	if ((urlValue === '' || !isValidURL(urlValue)) && textValue !== '') {
+    	    	inputTypeUrl.classList.add('error');
+    	    	inputTypeUrl.focus();
+    	    	isValid = false;
+    	    	isClosed = false;
+    	    	break;
+	    	}
+
+		    if(textValue !== '' && (isValidURL(urlValue))){
 		    	inputTypeUrl.classList.remove('error');
+		    	isValid = true;
+		    }
 
-    	    	if (textValue === '' && urlValue !== '') {
-	    	    	inputTypeText.classList.add('error');
-	    	    	inputTypeText.focus();
-	    	    	isValid = false;
-	    	    	isClosed = false;
-	    	    	break;
-    	    	}
 
-    	    	// Add http prefix if omitted
-    	    	if(urlValue.indexOf('http://') === -1){
-    	    		urlValue = 'http://' + urlValue;
-    	    	}
+    		if(isValid){
+				currentSettingBtn.classList.remove('active');
+				hasClass(divContainer, 'hidden');
 
-    	    	if ((urlValue === '' || !isValidURL(urlValue)) && textValue !== '') {
-	    	    	inputTypeUrl.classList.add('error');
-	    	    	inputTypeUrl.focus();
-	    	    	isValid = false;
-	    	    	isClosed = false;
-	    	    	break;
-    	    	}
+				// Create an option Node with array[i] content and append to selectBox
+				var option = document.createElement('option');
+				option.textContent = textValue;
+				option.value = urlValue;
+				currentSelectElm.appendChild(option);
 
-    		    if(textValue !== '' && (isValidURL(urlValue))){
-    		    	inputTypeUrl.classList.remove('error');
-    		    	isValid = true;
-    		    }
+				currentOpenInNewTabIcon.classList.remove('hidden');
+				currentSelectContainer.classList.remove('hidden');
+				currentIframeContainer.classList.remove('hidden');
+    		}
+    		else{
+    			textValue = '';
+    			urlValue = '';
+    		}
 
-	    		if(isValid){
-					collectInputArray.push({name:textValue, url:urlValue});
-					currentSettingBtn.classList.remove('active');
-					hasClass(divContainer, 'hidden');
-
-					// Create an option Node with array[i] content and append to selectBox
-					var option = document.createElement('option');
-					option.textContent = textValue;
-					option.value = urlValue;
-					currentSelectElm.appendChild(option);
-
-					currentOpenInNewTabIcon.classList.remove('hidden');
-					currentSelectContainer.classList.remove('hidden');
-					currentIframeContainer.classList.remove('hidden');
-	    		}
-			// }
+			collectInputArray.push({name:textValue, url:urlValue});
 		}
 
 		// If the array has at least one object
 	    if(collectInputArray.length > 0){
+
 	    	// If localStorage is supported:
 	    	// 1. Give reports a key based on form ID
 	    	// 2. Set the localStorageObject
-
 	    	if (localStorageSupported()) {
 	    		// Save it in localStorage, as a string
 				reports[dataAttr] = collectInputArray;
 				localStorage.setItem('reports', JSON.stringify(reports));
 	    	}
 
-	    	populateIframe(dataAttr);
+	    	populateIframe(dataAttr, currentSelectElm.options.length - 1);
 
 	    	// Close the containing form div
 	    	if(isClosed){
@@ -417,17 +421,21 @@ window.onload = (function() {
 	    }
 	};
 
-	var populateIframe = function(context){
+	var populateIframe = function(context, index){
 		// Change the default event context
 		if(typeof context === 'object'){
 			context = getElmAttribute(context.target, 'data-select');
 		}
+		console.log(index);
 
 		var currentSelectBox = UTILS.qs('[data-select = "' + context + '"]'),
-			optionsLength = currentSelectBox.options.length,
-			currentIndex = currentSelectBox.options[currentSelectBox.selectedIndex],
+			currentIndex = currentSelectBox.options[index ? index : currentSelectBox.selectedIndex],
 			currentIframeContainer = UTILS.qs('[data-iframe="' + context + '"]'),
 		    optionVal = currentIndex.value;
+
+		if(index){
+	    	currentSelectBox.selectedIndex = index;
+		}
 
 	    currentIframeContainer.src = optionVal;
 	};
