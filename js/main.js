@@ -132,10 +132,10 @@ window.onload = (function() {
 	    		var name = UTILS.qsa('[data-settings="' + inx + '"] fieldset [type="text"]'),
 	    		    url = UTILS.qsa('[data-settings="' + inx + '"] fieldset [type="url"]');
 
-			    for(var i = 0; i < savedData[inx].length; i++){
-			    	if(name[i] && url[i]){
-			    		name[i].value = savedData[inx][i].name;
-			    		url[i].value = savedData[inx][i].url;
+			    for(var x = 0; x < savedData[inx].length; x++){
+			    	if(name[x] && url[x]){
+			    		name[x].value = savedData[inx][x].name;
+			    		url[x].value = savedData[inx][x].url;
 			    	}
 			    }
 			    // Pass the saveInput function context
