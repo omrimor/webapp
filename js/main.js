@@ -1,6 +1,5 @@
-/* globals UTILS, Modernizr*/
-
 window.onload = (function() {
+	'use strict';
 	var settings = UTILS.qsa('.tab-content-settings'),
 		tabContainer = UTILS.qs('.tab-headers'),
 		tabList = UTILS.qs('[role="tablist"]'),
@@ -264,7 +263,6 @@ window.onload = (function() {
 		var target = e.target,
 			dataAttr = getElmAttribute(target, 'data-btn'),
 			toggleDiv = UTILS.qs('[data-settings="' + dataAttr + '"]');
-			// inputFieldsQr = UTILS.qsa('.settings-field');
 
 		if (hasClass(toggleDiv, 'hidden')){
 			target.classList.add('active');
@@ -334,10 +332,10 @@ window.onload = (function() {
 			// Reset isValid inside the If statment
 		    isValid = false;
 
-		    // If all fields & the array are empty don't need to validate
 		    if((textValue === '' && urlValue === '')){
 		    	emptyCount++;
 
+		    	// If all fieldsets are empty - set focus & error to the the first input
 		    	if(emptyCount === fieldsets.length){
 			    	fieldsets[0].getElementsByTagName('INPUT')[0].classList.add('error');
 			    	fieldsets[0].getElementsByTagName('INPUT')[0].focus();
@@ -349,6 +347,7 @@ window.onload = (function() {
 	    	inputTypeText.classList.remove('error');
 	    	inputTypeUrl.classList.remove('error');
 
+	    	// If input name is empty
 	    	if (textValue === '' && urlValue !== '') {
     	    	inputTypeText.classList.add('error');
     	    	inputTypeText.focus();
@@ -364,6 +363,7 @@ window.onload = (function() {
 		    	}
 	    	}
 
+	    	// If input url is empty or invalid
 	    	if ((urlValue === '' || !isValidURL(urlValue)) && textValue !== '') {
     	    	inputTypeUrl.classList.add('error');
     	    	inputTypeUrl.focus();
@@ -372,6 +372,7 @@ window.onload = (function() {
     	    	break;
 	    	}
 
+	    	// If input name & input url are filled & valid
 		    if(textValue !== '' && (isValidURL(urlValue))){
 		    	inputTypeUrl.classList.remove('error');
 		    	isValid = true;
@@ -392,6 +393,8 @@ window.onload = (function() {
 				currentSelectContainer.classList.remove('hidden');
 				currentIframeContainer.classList.remove('hidden');
     		}
+
+    		// In order to set other unfilled input to empty strings
     		else{
     			textValue = '';
     			urlValue = '';
@@ -412,6 +415,7 @@ window.onload = (function() {
 				localStorage.setItem('reports', JSON.stringify(reports));
 	    	}
 
+	    	// Populate the selectbox and make sure to set selecetd index to the last option
 	    	populateIframe(dataAttr, currentSelectElm.options.length - 1);
 
 	    	// Close the containing form div
@@ -426,13 +430,13 @@ window.onload = (function() {
 		if(typeof context === 'object'){
 			context = getElmAttribute(context.target, 'data-select');
 		}
-		console.log(index);
 
 		var currentSelectBox = UTILS.qs('[data-select = "' + context + '"]'),
 			currentIndex = currentSelectBox.options[index ? index : currentSelectBox.selectedIndex],
 			currentIframeContainer = UTILS.qs('[data-iframe="' + context + '"]'),
 		    optionVal = currentIndex.value;
 
+	    // If index is passed, set the selected index to it
 		if(index){
 	    	currentSelectBox.selectedIndex = index;
 		}

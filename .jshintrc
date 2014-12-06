@@ -71,7 +71,7 @@
     "devel"         : true,     // Development/debugging (alert, confirm, etc)
     "dojo"          : false,    // Dojo Toolkit
     "jasmine"       : false,    // Jasmine
-    "jquery"        : false,    // jQuery
+    "jquery"        : true,    // jQuery
     "mocha"         : false,    // Mocha
     "mootools"      : false,    // MooTools
     "node"          : false,    // Node.js
@@ -86,6 +86,8 @@
 
     // Custom Globals
      "globals"       : {         // additional predefined global variables
+        "UTILS" : true,
+        "Modernizr" : true
 
     }
 }
