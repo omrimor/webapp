@@ -13,7 +13,6 @@ window.onload = (function() {
 		notificationMsg = UTILS.qs('[data-span="notificationTxt"]'),
 		reports = {};
 
-
 //===================================================================
 // Define helper functions
 //===================================================================

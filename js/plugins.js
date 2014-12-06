@@ -1,5 +1,6 @@
 // Avoid `console` errors in browsers that lack a console.
 (function() {
+    'use strict';
     var method;
     var noop = function () {};
     var methods = [
@@ -33,7 +34,7 @@
  */
 
 var UTILS = (function () {
-
+    'use strict';
     return {
         /**
          * Shorthand for `querySelector`
@@ -42,7 +43,12 @@ var UTILS = (function () {
          * @return {Object}          DOM Node
          */
         qs: function (selector) {
-            return document.querySelector(selector);
+
+            if(document.querySelector){
+                return document.querySelector(selector);
+            } else {
+                alert('Your browser does not support the querySelector method.');
+            }
         },
 
         /**
@@ -52,7 +58,11 @@ var UTILS = (function () {
          * @return {Object}          DOM NodeList
          */
         qsa: function (selector) {
-            return document.querySelectorAll(selector);
+            if(document.querySelectorAll){
+                return document.querySelectorAll(selector);
+            } else {
+                alert('Your browser does not support the querySelectorAll method.');
+            }
         },
 
         /**
