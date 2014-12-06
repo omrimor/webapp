@@ -157,7 +157,7 @@ body {
 
 header {
     position: absolute;
-    z-index: 100;
+    z-index: 200;
     left: 0;
     right: 0;
     background: #000;
@@ -200,6 +200,7 @@ input[name="q"]:focus {
 
 .page-body {
     background: rgba(0, 0, 0, 0.3);
+    overflow: auto;
 }
 
 
@@ -369,6 +370,7 @@ nav {
     left: 15px;
     right: 15px;
     bottom: 0;
+    height: 100%;
 }
 
 .tab-headers {
@@ -488,14 +490,13 @@ nav {
 }
 
 .tab-content-body {
-    /*width: 100%;*/
     position: absolute;
     top: 70px;
     bottom: 0;
     left: 0;
     right: 0;
     padding: 0 1.515151515%;
-    /*margin-top: 40px;*/
+    margin-bottom: 30px;
 }
 
 .tab-content-body--iframe {
@@ -505,7 +506,6 @@ nav {
 }
 
 .tab-content-settings {
-    /*max-width: 1240px;*/
     min-width: 600px;
     position: absolute;
     top: 60px;
@@ -703,6 +703,7 @@ nav {
     right: 1.515151515%;
     max-width: 1320px;
     min-width: 640px;
+    height: 100%;
     bottom: 0;
     top: 0;
     margin: 0 auto;
