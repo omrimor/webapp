@@ -3,7 +3,7 @@ window.onload = (function() {
 	var settings = UTILS.qsa('.tab-content-settings'),
 		tabContainer = UTILS.qs('.tab-headers'),
 		tabList = UTILS.qs('[role="tablist"]'),
-		searchBox = UTILS.qs('input[name="q"]'),
+		// searchBox = UTILS.qs('input[name="q"]'),
 		SettingsBtn = UTILS.qsa('.action-btn.settings'),
 		openInNewTabIcon  = UTILS.qsa('.action-btn.expand'),
 		selectBox = UTILS.qsa('.choose-iframe-select'),
@@ -460,8 +460,10 @@ window.onload = (function() {
 //===================================================================
 
 	UTILS.addEvent(tabContainer, 'click keypress', changeHash);
-	UTILS.addEvent(window, 'hashchange', getTab);
-	UTILS.addEvent(searchBox, 'keyup', findReports);
+	// UTILS.addEvent(window, 'hashchange', getTab);
+	// UTILS.addEvent(searchBox, 'keyup', findReports);
+	$(window).on('hashchange', getTab);
+	$('input[name="q"]').on('keyup', findReports);
 	superAddEvent(SettingsBtn, 'click', toggleSettings);
 	superAddEvent(cancelFormBtn, 'click', cancelForm);
 	superAddEvent(submitBtn, 'click', saveInput);
