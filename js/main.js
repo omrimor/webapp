@@ -1,14 +1,15 @@
 window.onload = (function() {
 	'use strict';
-	var settings = UTILS.qsa('.tab-content-settings'),
-		tabContainer = UTILS.qs('.tab-headers'),
+	var
+	// settings = UTILS.qsa('.tab-content-settings'),
+		// tabContainer = UTILS.qs('.tab-headers'),
 		tabList = UTILS.qs('[role="tablist"]'),
 		// searchBox = UTILS.qs('input[name="q"]'),
-		SettingsBtn = UTILS.qsa('.action-btn.settings'),
-		openInNewTabIcon  = UTILS.qsa('.action-btn.expand'),
+		// SettingsBtn = UTILS.qsa('.action-btn.settings'),
+		// openInNewTabIcon  = UTILS.qsa('.action-btn.expand'),
 		selectBox = UTILS.qsa('.choose-iframe-select'),
-		submitBtn = UTILS.qsa('.btn.btn__submit-form'),
-		cancelFormBtn = UTILS.qsa('.link.cancel-form'),
+		// submitBtn = UTILS.qsa('.btn.btn__submit-form'),
+		// cancelFormBtn = UTILS.qsa('.link.cancel-form'),
 		notification = UTILS.qs('.notifications'),
 		notificationMsg = UTILS.qs('[data-span="notificationTxt"]'),
 		reports = {};
@@ -29,9 +30,9 @@ window.onload = (function() {
 	    return (' ' + element.className + ' ').indexOf(' ' + cls + ' ') > -1;
 	};
 
-	for (var i = 0; i < settings.length; i++) {
-		hasClass(settings[i], 'hidden');
-	}
+	// for (var i = 0; i < settings.length; i++) {
+	// 	hasClass(settings[i], 'hidden');
+	// }
 
 	var addClass = function(nodeElm){
 		if(nodeElm.length !== undefined){
@@ -66,15 +67,15 @@ window.onload = (function() {
 	  return pattern.test(urlStr);
 	};
 
-	var superAddEvent = function(elm, type, handler){
-		if(elm.length !== undefined){
-			for (var i = 0; i < elm.length; i++) {
-				UTILS.addEvent(elm[i], type, handler);
-			}
-		}else {
-			UTILS.addEvent(elm, type, handler);
-		}
-	};
+	// var superAddEvent = function(elm, type, handler){
+	// 	if(elm.length !== undefined){
+	// 		for (var i = 0; i < elm.length; i++) {
+	// 			UTILS.addEvent(elm[i], type, handler);
+	// 		}
+	// 	}else {
+	// 		UTILS.addEvent(elm, type, handler);
+	// 	}
+	// };
 
 	var localStorageSupported = function(){
 		if (!Modernizr.localstorage) {
@@ -192,15 +193,15 @@ window.onload = (function() {
     };
 
 	var getTab = function(){
-		var currentTab = UTILS.qs('li a[href="' + location.hash.replace('panel-', '') + '"]'),
-			allTabs = UTILS.qsa('a[role="tab"]');
+		var $allTabs = $('a[role="tab"]'),
+			$currentTab = $('li a[href="' + location.hash.replace('panel-', '') + '"]');
 
 		if (location.hash === '') {
-			currentTab =  allTabs[0];
+			$currentTab[0] =  $allTabs[0];
 		}
 
 		// Pass the changeHash function context
-		changeHash({target:currentTab});
+		changeHash({target:$currentTab[0]});
 	};
 
 	var changeHash = function(e){
@@ -210,13 +211,14 @@ window.onload = (function() {
 
 		var clicked = e.target,
 			tabAttr = getElmAttribute(clicked, 'href');
-			// allTabs = UTILS.qsa('a[role="tab"]');
 
 		location.hash = 'panel-' + tabAttr.replace('#', '');
 
-	    // var currentHash = location.hash.replace('panel-', '');
+		console.log($('div[role="tabpanel"]'));
 
-	    removeClass(UTILS.qsa('div[role="tabpanel"]'));
+		removeClass($('div[role="tabpanel"]'));
+
+	    // removeClass(UTILS.qsa('div[role="tabpanel"]'));
 	    removeClass(UTILS.qsa('a[role="tab"]'));
 
 	    addClass(UTILS.qs('a[href="#' + tabAttr + '"]'));
@@ -459,24 +461,44 @@ window.onload = (function() {
 // Event handlers
 //===================================================================
 
-	UTILS.addEvent(tabContainer, 'click keypress', changeHash);
+	// UTILS.addEvent(tabContainer, 'click keypress', changeHash);
 	// UTILS.addEvent(window, 'hashchange', getTab);
 	// UTILS.addEvent(searchBox, 'keyup', findReports);
+	// superAddEvent(SettingsBtn, 'click', toggleSettings);
+	// superAddEvent(cancelFormBtn, 'click', cancelForm);
+	// superAddEvent(submitBtn, 'click', saveInput);
+	// superAddEvent(settings, 'keyup', escToClose);
+	// superAddEvent(selectBox, 'change', populateIframe);
+	// superAddEvent(openInNewTabIcon, 'click', openInNewTab);
+	$('.tab-headers').on('click keypress', changeHash);
 	$(window).on('hashchange', getTab);
 	$('input[name="q"]').on('keyup', findReports);
-	superAddEvent(SettingsBtn, 'click', toggleSettings);
-	superAddEvent(cancelFormBtn, 'click', cancelForm);
-	superAddEvent(submitBtn, 'click', saveInput);
-	superAddEvent(settings, 'keyup', escToClose);
-	superAddEvent(selectBox, 'change', populateIframe);
-	superAddEvent(openInNewTabIcon, 'click', openInNewTab);
+	$('.action-btn.settings').on('click', toggleSettings);
+	$('.link.cancel-form').on('click', cancelForm);
+	$('.btn.btn__submit-form').on('click', saveInput);
+	$('.tab-content-settings').on('keyup', escToClose);
+	$('.choose-iframe-select').on('change', populateIframe);
+	$('.action-btn.expand').on('click', openInNewTab);
 
-	UTILS.ajax('../webapp/data/notification.txt', {
-		done: function(response) {
+	$.get('../webapp/data/notification.txt', function(){
+		console.log('success!');
+		})
+		.done(function(data) {
+			console.log('success again!');
 			notification.classList.remove('hidden');
-			notificationMsg.innerHTML = response;
+			notificationMsg.innerHTML = data;
 			tabList.style.top = '330px';
-		}
-	});
+		})
+		.fail(function() {
+			console.log('faillll');
+		});
+
+	// UTILS.ajax('../webapp/data/notification.txt', {
+	// 	done: function(response) {
+	// 		notification.classList.remove('hidden');
+	// 		notificationMsg.innerHTML = response;
+	// 		tabList.style.top = '330px';
+	// 	}
+	// });
 
 })();
