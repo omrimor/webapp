@@ -1,18 +1,13 @@
-window.onload = (function() {
+$(function() {
 	'use strict';
 	var
-	// settings = UTILS.qsa('.tab-content-settings'),
-		// tabContainer = UTILS.qs('.tab-headers'),
-		tabList = UTILS.qs('[role="tablist"]'),
-		// searchBox = UTILS.qs('input[name="q"]'),
-		// SettingsBtn = UTILS.qsa('.action-btn.settings'),
-		// openInNewTabIcon  = UTILS.qsa('.action-btn.expand'),
+		$tabList = $('[role="tablist"]'),
 		selectBox = UTILS.qsa('.choose-iframe-select'),
-		// submitBtn = UTILS.qsa('.btn.btn__submit-form'),
-		// cancelFormBtn = UTILS.qsa('.link.cancel-form'),
-		notification = UTILS.qs('.notifications'),
-		notificationMsg = UTILS.qs('[data-span="notificationTxt"]'),
+		$selectBox = $('.choose-iframe-select'),
+		$notification = $('.notifications'),
+		$notificationMsg = $('[data-span="notificationTxt"]'),
 		reports = {};
+
 
 //===================================================================
 // Define helper functions
@@ -30,52 +25,22 @@ window.onload = (function() {
 	    return (' ' + element.className + ' ').indexOf(' ' + cls + ' ') > -1;
 	};
 
-	// for (var i = 0; i < settings.length; i++) {
-	// 	hasClass(settings[i], 'hidden');
-	// }
-
 	var addClass = function(nodeElm){
-		if(nodeElm.length !== undefined){
-			for (var i = 0; i < nodeElm.length; i++) {
-				nodeElm[i].classList.add('active');
-				nodeElm[i].setAttribute('aria-selected', 'true');
-				nodeElm[i].removeAttribute('aria-hidden');
-			}
-		} else {
-			nodeElm.classList.add('active');
-			nodeElm.setAttribute('aria-selected', 'true');
-			nodeElm.removeAttribute('aria-hidden');
-		}
+		nodeElm.addClass('active')
+		.attr('aria-selected', 'true')
+		.removeAttr('aria-hidden');
 	};
 
 	var removeClass = function(nodeElm){
-		if(nodeElm.length !== undefined){
-			for (var i = 0; i < nodeElm.length; i++) {
-				nodeElm[i].classList.remove('active');
-				nodeElm[i].setAttribute('aria-hidden', 'true');
-				nodeElm[i].removeAttribute('aria-selected');
-			}
-		} else {
-			nodeElm.classList.remove('active');
-			nodeElm.setAttribute('aria-hidden', 'true');
-			nodeElm.removeAttribute('aria-selected');
-		}
+		nodeElm.removeClass('active')
+		.attr('aria-hidden', 'true')
+		.removeAttr('aria-selected');
 	};
 
 	var isValidURL =  function(urlStr) {
 	  var pattern = /(([a-z]{4,6}:\/\/)|(^|\s))([a-zA-Z0-9\-]+\.)+[a-z]{2,13}[\.\?\=\&\%\/\w\-]*\b([^@]|$)/;
 	  return pattern.test(urlStr);
 	};
-
-	// var superAddEvent = function(elm, type, handler){
-	// 	if(elm.length !== undefined){
-	// 		for (var i = 0; i < elm.length; i++) {
-	// 			UTILS.addEvent(elm[i], type, handler);
-	// 		}
-	// 	}else {
-	// 		UTILS.addEvent(elm, type, handler);
-	// 	}
-	// };
 
 	var localStorageSupported = function(){
 		if (!Modernizr.localstorage) {
@@ -144,48 +109,40 @@ window.onload = (function() {
 	    	isValid = false;
 
     	if (e.keyCode === 13) {
-			for (var j = 0; j < selectBox.length; j++) {
-				var singleSelectBox = selectBox[j],
-					singleOptions = singleSelectBox.options,
-					dataAttr = getElmAttribute(singleSelectBox, 'data-select'),
-					currentIframeContainer = UTILS.qs('[data-iframe="' + dataAttr + '"]');
 
-				for (var i = 0; i < singleOptions.length; i++) {
-					var optionTxt = singleOptions[i].text,
-						result = optionTxt.indexOf(searchVal);
+    		$selectBox.each(function(index, selectBox){
+    			var $options = $(selectBox).find('option'),
+    			dataAttr = getElmAttribute(selectBox, 'data-select');
 
-						var optionVal = singleOptions[i].value;
+    			$options.each(function(i, item){
+    				var result = item.text.indexOf(searchVal),
+    				optionVal = item.value;
+    				console.log(item.text.indexOf(searchVal), i);
 
-						console.log(optionTxt, searchVal);
-						console.log('found: ' + result);
+    				if(result > -1){
+    					removeClass($('div[role="tabpanel"]'));
+    					removeClass($('a[role="tab"]'));
 
-					if(result > -1){
+    					addClass($('[data-link="' + dataAttr + '"]'));
+    					addClass($('[data-div="' + dataAttr + '"]'));
+    					selectBox.selectedIndex = i;
+    					$('[data-iframe="' + dataAttr + '"]').attr('src', optionVal);
+    					isValid = true;
+    					return;
+    				}
 
-						removeClass(UTILS.qsa('div[role="tabpanel"]'));
-						removeClass(UTILS.qsa('a[role="tab"]'));
+    			});
 
-						addClass(UTILS.qs('[data-link="' + dataAttr + '"]'));
-						addClass(UTILS.qs('[data-div="' + dataAttr + '"]'));
-						singleOptions.selectedIndex = i;
-						currentIframeContainer.src = optionVal;
-						isValid = true;
-
-						// Break the loop to exit if first value found
-						j = selectBox.length;
-						break;
-					}
-				}
-			}
+    		});
 			// If no match to search value - display message
 			if(!isValid){
-				if(hasClass(notification, 'hidden')){
-					notification.classList.remove('hidden');
-
-					tabList.style.top = '330px';
-
-					notificationMsg.innerHTML = 'The searched report <b>' + searchVal + '</b> was not found';
+				if($notification.hasClass('hidden')){
+					$notification.removeClass('hidden');
+					$tabList.css({'top': '330px'});
+					$notificationMsg.html('The searched report <b>' + searchVal + '</b> was not found');
 				} else {
-					notificationMsg.innerHTML = 'The searched report <b>' + searchVal + '</b> was not found';
+					$notificationMsg.html('The searched report <b>' + searchVal + '</b> was not found');
+
 				}
 			}
     	}
@@ -210,46 +167,39 @@ window.onload = (function() {
 		}
 
 		var clicked = e.target,
-			tabAttr = getElmAttribute(clicked, 'href');
+			tabAttr = getElmAttribute(clicked, 'href'),
+			$firstInput = $('#' + tabAttr + ' input').eq(0);
 
 		location.hash = 'panel-' + tabAttr.replace('#', '');
 
-		console.log($('div[role="tabpanel"]'));
-
 		removeClass($('div[role="tabpanel"]'));
+		removeClass($('a[role="tab"]'));
 
-	    // removeClass(UTILS.qsa('div[role="tabpanel"]'));
-	    removeClass(UTILS.qsa('a[role="tab"]'));
-
-	    addClass(UTILS.qs('a[href="#' + tabAttr + '"]'));
-	    addClass(UTILS.qs('#' + tabAttr));
+	    addClass($('a[href="#' + tabAttr + '"]'));
+	    addClass($('#' + tabAttr));
 
 		if (e.keyCode === 13 || e.keyCode === 32) {
 			location.hash = 'panel-' + tabAttr.replace('#', '');
 		}
 
-		// Make sure when a empty form exist in a form, set focus to first input
-		var firstInput = UTILS.qs('#' + tabAttr + ' input');
-		if(firstInput){
-			if(firstInput.value === ''){
-				firstInput.focus();
+		if($firstInput){
+			if($firstInput.val() === ''){
+				$firstInput.focus();
 			} else {
-				firstInput.blur();
+				$firstInput.blur();
 			}
 		}
+
 	};
 
 	var escToClose = function(e){
 		var target = e.currentTarget,
-		dataAttr = getElmAttribute(target, 'data-settings'),
-		currentSettingBtn = UTILS.qs('[data-btn="' + dataAttr + '"]'),
-		currentDiv = UTILS.qs('[data-settings="' + dataAttr + '"]');
+		dataAttr = getElmAttribute(target, 'data-settings');
 
 		if(e.keyCode === 27){
-			target.classList.add('hidden');
-			currentSettingBtn.classList.remove('active');
-			currentDiv.classList.remove('active');
-			hasClass(currentDiv, 'hidden');
+			$(target).addClass('hidden');
+			$('[data-btn="' + dataAttr + '"]').removeClass('active');
+			$('[data-settings="' + dataAttr + '"]').removeClass('active').hasClass('hidden');
 		}
 	};
 
@@ -257,27 +207,19 @@ window.onload = (function() {
 		e.preventDefault();
 		var target = e.target,
 			dataAttr = getElmAttribute(target, 'data-btn'),
-			toggleDiv = UTILS.qs('[data-settings="' + dataAttr + '"]');
+			$toggleDiv = $('[data-settings="' + dataAttr + '"]');
 
-		if (hasClass(toggleDiv, 'hidden')){
-			target.classList.add('active');
-			toggleDiv.classList.remove('hidden');
-		} else {
-			target.classList.remove('active');
-			toggleDiv.classList.add('hidden');
-		}
+			$toggleDiv.toggleClass('hidden');
+			$(target).toggleClass('active');
 	};
 
 	var closeForm = function(e){
 		e.preventDefault();
 		var target = e.target,
-			dataAttr = getElmAttribute(target, 'data-link'),
-			currentSettingBtn = UTILS.qs('[data-btn="' + dataAttr + '"]'),
-			closeDiv = UTILS.qs('[data-settings="' + dataAttr + '"]');
+			dataAttr = getElmAttribute(target, 'data-link');
 
-		closeDiv.classList.add('hidden');
-		currentSettingBtn.classList.remove('active');
-		hasClass(closeDiv, 'hidden');
+		$('[data-settings="' + dataAttr + '"]').addClass('hidden').hasClass('hidden');
+		$('[data-btn="' + dataAttr + '"]').removeClass('active');
 	};
 
 	var cancelForm = function(e){
@@ -426,27 +368,24 @@ window.onload = (function() {
 			context = getElmAttribute(context.target, 'data-select');
 		}
 
-		var currentSelectBox = UTILS.qs('[data-select = "' + context + '"]'),
+		var currentSelectBox = $('[data-select = "' + context + '"]').get()[0],
 			currentIndex = currentSelectBox.options[index ? index : currentSelectBox.selectedIndex],
-			currentIframeContainer = UTILS.qs('[data-iframe="' + context + '"]'),
 		    optionVal = currentIndex.value;
 
 	    // If index is passed, set the selected index to it
 		if(index){
 	    	currentSelectBox.selectedIndex = index;
 		}
-
-	    currentIframeContainer.src = optionVal;
+		$('[data-iframe="' + context + '"]').attr('src', optionVal);
 	};
 
 	var openInNewTab = function(e){
 		e.preventDefault();
 		var target = e.target,
 			dataAttr = getElmAttribute(target, 'data-expand'),
-			currentIframeContainer = UTILS.qs('[data-iframe="' + dataAttr + '"]'),
-			currentUrl = currentIframeContainer.src;
+			currentUrl = $('[data-iframe="' + dataAttr + '"]').attr('src');
 
-			if(hasClass(currentIframeContainer, 'hidden')){
+			if($('[data-iframe="' + dataAttr + '"]').hasClass('hidden')){
 				return;
 			} else {
 				window.open(currentUrl, '_blank');
@@ -461,15 +400,6 @@ window.onload = (function() {
 // Event handlers
 //===================================================================
 
-	// UTILS.addEvent(tabContainer, 'click keypress', changeHash);
-	// UTILS.addEvent(window, 'hashchange', getTab);
-	// UTILS.addEvent(searchBox, 'keyup', findReports);
-	// superAddEvent(SettingsBtn, 'click', toggleSettings);
-	// superAddEvent(cancelFormBtn, 'click', cancelForm);
-	// superAddEvent(submitBtn, 'click', saveInput);
-	// superAddEvent(settings, 'keyup', escToClose);
-	// superAddEvent(selectBox, 'change', populateIframe);
-	// superAddEvent(openInNewTabIcon, 'click', openInNewTab);
 	$('.tab-headers').on('click keypress', changeHash);
 	$(window).on('hashchange', getTab);
 	$('input[name="q"]').on('keyup', findReports);
@@ -485,20 +415,13 @@ window.onload = (function() {
 		})
 		.done(function(data) {
 			console.log('success again!');
-			notification.classList.remove('hidden');
-			notificationMsg.innerHTML = data;
-			tabList.style.top = '330px';
+			$notification.removeClass('hidden');
+			$notificationMsg.html(data);
+			$tabList.css({'top': '330px'});
 		})
 		.fail(function() {
 			console.log('faillll');
 		});
 
-	// UTILS.ajax('../webapp/data/notification.txt', {
-	// 	done: function(response) {
-	// 		notification.classList.remove('hidden');
-	// 		notificationMsg.innerHTML = response;
-	// 		tabList.style.top = '330px';
-	// 	}
-	// });
 
-})();
+});
