@@ -19,12 +19,12 @@ module.exports = function(grunt){
 		},
 		concat: {
 			options: {
-				separator: ';',
+				separator: ';\n',
 				sourceMap: true
 			},
 			target: {
-				src: '<%= dirs.src %>/js/**/*.js',
-				dest: '<%= dirs.src %>/js/all.js'
+				src: '<%= dirs.src %>/js/*.js',
+				dest: '<%= dirs.dest %>/js/main.js'
 			}
 		},
 		uglify: {
@@ -35,8 +35,8 @@ module.exports = function(grunt){
 				sourceMap: true
 			},
 			target: {
-				src: '<%= dirs.src %>/js/all.js',
-				dest: '<%= dirs.dest %>/js/all.min.js'
+				src: '<%= dirs.dest %>/js/main.js',
+				dest: '<%= dirs.dest %>/js/main.min.js'
 			}
 		},
 		sass: {

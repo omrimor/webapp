@@ -370,7 +370,7 @@ $(function() {
 // Ajax call
 //===================================================================
 
-	$.get('../webapp/data/notification.txt', function(){
+	$.get('../../webapp/data/notification.txt', function(){
 		console.log('success!');
 		})
 		.done(function(data) {
