@@ -135,7 +135,7 @@ select:focus {
    ========================================================================== */
 
 body {
-    background: url(../img/body-background.jpg) no-repeat center center fixed;
+    background: url(../../img/body-background.jpg) no-repeat center center fixed;
     -webkit-background-size: cover;
       -moz-background-size: cover;
       -o-background-size: cover;
@@ -172,11 +172,11 @@ header {
     text-indent: -9999px;
     width: 148px;
     height: 30px;
-    background: url(../img/logo-netcraft.svg) no-repeat top left;
+    background: url(../../img/logo-netcraft.svg) no-repeat top left;
 }
 
 .no-svg .logo {
-    background: url(../img/logo-netcraft.png) no-repeat top left;
+    background: url(../../img/logo-netcraft.png) no-repeat top left;
 }
 
 .search-box {
@@ -262,15 +262,15 @@ nav {
 }
 
 .ns-dashboard {
-    background-image: url(../img/action-report-top.png);
+    background-image: url(../../img/action-report-top.png);
 }
 
 .ns-faq {
-    background-image: url(../img/actions-help.png);
+    background-image: url(../../img/actions-help.png);
 }
 
 .ns-reporting {
-    background-image: url(../img/action-report-new.png);
+    background-image: url(../../img/action-report-new.png);
 }
 
 .menu {
@@ -449,7 +449,7 @@ nav {
     position: absolute;
     top: 14px;
     right: 7px;
-    background-image: url(../img/select-arrow.png);
+    background-image: url(../../img/select-arrow.png);
     background-repeat: no-repeat;
 }
 
@@ -475,7 +475,7 @@ nav {
 }
 
 .action-btn.expand {
-    background-image: url(../img/expand.png);
+    background-image: url(../../img/expand.png);
     right: 40px;
 }
 
@@ -485,7 +485,7 @@ nav {
 
 .action-btn.settings {
     z-index: 50;
-    background-image: url(../img/settings.png);
+    background-image: url(../../img/settings.png);
     right: 0;
 }
 
