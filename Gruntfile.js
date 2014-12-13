@@ -23,8 +23,8 @@ module.exports = function(grunt){
 				sourceMap: true
 			},
 			target: {
-				src: '<%= dirs.src %>/js/*.js',
-				dest: '<%= dirs.dest %>/js/main.js'
+				src: '<%= dirs.src %>/js/**/*.js',
+				dest: '<%= dirs.src %>/js/all.js'
 			}
 		},
 		uglify: {
@@ -35,8 +35,8 @@ module.exports = function(grunt){
 				sourceMap: true
 			},
 			target: {
-				src: '<%= dirs.dest %>/js/main.js',
-				dest: '<%= dirs.dest %>/js/main.min.js'
+				src: '<%= dirs.src %>/js/all.js',
+				dest: '<%= dirs.dest %>/js/all.min.js'
 			}
 		},
 		sass: {
