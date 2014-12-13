@@ -1,13 +1,10 @@
 $(function() {
 	'use strict';
-	var
-		$tabList = $('[role="tablist"]'),
-		selectBox = UTILS.qsa('.choose-iframe-select'),
+
+	var $tabList = $('[role="tablist"]'),
 		$selectBox = $('.choose-iframe-select'),
 		$notification = $('.notifications'),
-		$notificationMsg = $('[data-span="notificationTxt"]'),
-		reports = {};
-
+		$notificationMsg = $('[data-span="notificationTxt"]');
 
 //===================================================================
 // Define helper functions
@@ -19,10 +16,6 @@ $(function() {
 		} else {
 			return elm.getAttribute(attr);
 		}
-	};
-
-	var hasClass = function (element, cls) {
-	    return (' ' + element.className + ' ').indexOf(' ' + cls + ' ') > -1;
 	};
 
 	var addClass = function(nodeElm){
@@ -50,57 +43,61 @@ $(function() {
 		return true;
 	};
 
-
 //===================================================================
 // Handler functions
 //===================================================================
 
-    var initReprots = function(){
-	    var savedData = localStorage.getItem('reports'),
-	    allForms = UTILS.qsa('form');
+	var setReports = function(data){
+    	if (localStorageSupported()) {
+    		// Save it in localStorage, as a string
+			localStorage.setItem('reports', JSON.stringify(data));
+    	}
+	};
+
+	var getReports = function(){
+	    var savedData = localStorage.getItem('reports');
 
 	    // If no localStorage, we can't retrieve any data
 	    if (!localStorageSupported()) {
 	    	return false;
 	    }
-
 	    try {
 	    	savedData = JSON.parse(savedData);
-	    	if(savedData){
-		    	reports = savedData;
-	    	}
-
 	    } catch (e) {
 	    	console.error('The saved data was not in a valid JSON format');
-	    	return false;
 	    }
-
-	    for (var i = 0; i < allForms.length; i++) {
-	    	var inputs = allForms[i].getElementsByTagName('input');
-	    	for (var j = 0; j < inputs.length; j++) {
-	    		inputs[j].value = '';
-	    	}
+	    //Set an empty object to savedData if Not exist
+	    if(!savedData){
+	    	savedData = {};
 	    }
+	    return savedData;
+	};
 
+    var initReprots = function(){
+	    var savedData = getReports();
+
+	    $('form').each(function(index, item){
+	    	$(item).find('input').each(function(i, itm){
+	    		$(itm).val('');
+	    	});
+	    });
 	    // For each saved report
-	    for (var inx in savedData) {
+	    $.each(savedData, function(key, value){
+    	 	// Prevent iterating inherited properties
+	    	if (savedData.hasOwnProperty(key)) {
+	    		var $name = $('[data-settings="' + key + '"] fieldset [type="text"]'),
+	    			$url = $('[data-settings="' + key + '"] fieldset [type="url"]');
 
-	    	// Prevent iterating inherited properties
-	    	if (savedData.hasOwnProperty(inx)) {
-
-	    		var name = UTILS.qsa('[data-settings="' + inx + '"] fieldset [type="text"]'),
-	    		    url = UTILS.qsa('[data-settings="' + inx + '"] fieldset [type="url"]');
-
-			    for(var x = 0; x < savedData[inx].length; x++){
-			    	if(name[x] && url[x]){
-			    		name[x].value = savedData[inx][x].name;
-			    		url[x].value = savedData[inx][x].url;
-			    	}
-			    }
-			    // Pass the saveInput function context
-				saveInput({target: UTILS.qs('[data-form="' + inx + '"]')});
-	    	}
-	    }
+		    	$(savedData[key]).each(function(index, item){
+		    		if(item.name && item.url){
+			    		$name[index].value = item.name;
+			    		$url[index].value = item.url;
+		    		}
+		    	});
+	    	    // Pass the saveInput function context
+	    		saveInput({target: $('[data-form="' + key + '"]').eq(0)[0]});
+			}
+	    });
     };
 
     var findReports = function(e){
@@ -109,7 +106,6 @@ $(function() {
 	    	isValid = false;
 
     	if (e.keyCode === 13) {
-
     		$selectBox.each(function(index, selectBox){
     			var $options = $(selectBox).find('option'),
     			dataAttr = getElmAttribute(selectBox, 'data-select');
@@ -117,12 +113,11 @@ $(function() {
     			$options.each(function(i, item){
     				var result = item.text.indexOf(searchVal),
     				optionVal = item.value;
-    				console.log(item.text.indexOf(searchVal), i);
 
+    				// If match to search value - go to first match found
     				if(result > -1){
     					removeClass($('div[role="tabpanel"]'));
     					removeClass($('a[role="tab"]'));
-
     					addClass($('[data-link="' + dataAttr + '"]'));
     					addClass($('[data-div="' + dataAttr + '"]'));
     					selectBox.selectedIndex = i;
@@ -130,9 +125,7 @@ $(function() {
     					isValid = true;
     					return;
     				}
-
     			});
-
     		});
 			// If no match to search value - display message
 			if(!isValid){
@@ -142,11 +135,9 @@ $(function() {
 					$notificationMsg.html('The searched report <b>' + searchVal + '</b> was not found');
 				} else {
 					$notificationMsg.html('The searched report <b>' + searchVal + '</b> was not found');
-
 				}
 			}
     	}
-
     };
 
 	var getTab = function(){
@@ -156,7 +147,6 @@ $(function() {
 		if (location.hash === '') {
 			$currentTab[0] =  $allTabs[0];
 		}
-
 		// Pass the changeHash function context
 		changeHash({target:$currentTab[0]});
 	};
@@ -165,13 +155,11 @@ $(function() {
 		if(e.preventDefault){
 			e.preventDefault();
 		}
-
 		var clicked = e.target,
 			tabAttr = getElmAttribute(clicked, 'href'),
 			$firstInput = $('#' + tabAttr + ' input').eq(0);
 
 		location.hash = 'panel-' + tabAttr.replace('#', '');
-
 		removeClass($('div[role="tabpanel"]'));
 		removeClass($('a[role="tab"]'));
 
@@ -181,7 +169,6 @@ $(function() {
 		if (e.keyCode === 13 || e.keyCode === 32) {
 			location.hash = 'panel-' + tabAttr.replace('#', '');
 		}
-
 		if($firstInput){
 			if($firstInput.val() === ''){
 				$firstInput.focus();
@@ -189,7 +176,6 @@ $(function() {
 				$firstInput.blur();
 			}
 		}
-
 	};
 
 	var escToClose = function(e){
@@ -209,8 +195,8 @@ $(function() {
 			dataAttr = getElmAttribute(target, 'data-btn'),
 			$toggleDiv = $('[data-settings="' + dataAttr + '"]');
 
-			$toggleDiv.toggleClass('hidden');
-			$(target).toggleClass('active');
+		$toggleDiv.toggleClass('hidden');
+		$(target).toggleClass('active');
 	};
 
 	var closeForm = function(e){
@@ -232,132 +218,100 @@ $(function() {
 		if(e.preventDefault){
 			e.preventDefault();
 		}
-
 		var isValid = false,
 			isClosed = true,
 			target = e.target,
 			dataAttr = getElmAttribute(target, 'data-form'),
-			currentSettingBtn = UTILS.qs('[data-btn="' + dataAttr + '"]'),
-			divContainer = UTILS.qs('[data-settings="' + dataAttr + '"]'),
-			currentSelectContainer = UTILS.qs('[data-selectContainer="' + dataAttr + '"]'),
-			currentSelectElm = UTILS.qs('[data-select="' + dataAttr + '"]'),
-			currentIframeContainer = UTILS.qs('[data-iframe="' + dataAttr + '"]'),
-			currentOpenInNewTabIcon = UTILS.qs('[data-expand="' + dataAttr + '"]'),
-			fieldsets = UTILS.qsa('[data-settings="' + dataAttr + '"] fieldset'),
+			$currentSelectElm = $('[data-select="' + dataAttr + '"]'),
+			$fieldsets = $('[data-settings="' + dataAttr + '"] fieldset'),
 			collectInputArray = [],
+			reports = getReports(),
 		    emptyCount = 0;
-
-		// Make sure the select box is empty on every iteration
-		while (currentSelectElm.firstChild) {
-		    currentSelectElm.removeChild(currentSelectElm.firstChild);
-		}
+		// Make sure the select box is empty
+		$currentSelectElm.empty();
 
 		// If array is empty
 		if(collectInputArray.length === 0){
-			currentSelectContainer.classList.add('hidden');
-			currentIframeContainer.classList.add('hidden');
-			currentOpenInNewTabIcon.classList.add('hidden');
+			$('[data-selectContainer="' + dataAttr + '"]').addClass('hidden');
+			$('[data-iframe="' + dataAttr + '"]').addClass('hidden');
+			$('[data-expand="' + dataAttr + '"]').addClass('hidden');
 		}
-
-		for (var i = 0; i < fieldsets.length; i++) {
-			var fieldset = fieldsets[i],
-			    inputTypeText = fieldset.getElementsByTagName('INPUT')[0],
-			    textValue = inputTypeText.value,
-			    inputTypeUrl = fieldset.getElementsByTagName('INPUT')[1],
-			    urlValue = inputTypeUrl.value;
+		$fieldsets.each(function(index, item){
+			var $inputTypeText = $(item.getElementsByTagName('INPUT')[0]),
+				$textValue = $inputTypeText.val(),
+				$inputTypeUrl = $(item.getElementsByTagName('INPUT')[1]),
+				$urlValue = $inputTypeUrl.val();
 
 			// Reset isValid inside the If statment
 		    isValid = false;
 
-		    if((textValue === '' && urlValue === '')){
+		    if(($textValue === '' && $urlValue === '')){
 		    	emptyCount++;
 
 		    	// If all fieldsets are empty - set focus & error to the the first input
-		    	if(emptyCount === fieldsets.length){
-			    	fieldsets[0].getElementsByTagName('INPUT')[0].classList.add('error');
-			    	fieldsets[0].getElementsByTagName('INPUT')[0].focus();
+		    	if(emptyCount === $fieldsets.size()){
+			    	$($fieldsets.eq(0).find('input')[0]).addClass('error').focus();
 			    	isValid = false;
 			    	localStorage.clear();
 		    	}
 		    }
-
-	    	inputTypeText.classList.remove('error');
-	    	inputTypeUrl.classList.remove('error');
+		    $inputTypeText.removeClass('error');
+		    $inputTypeUrl.removeClass('error');
 
 	    	// If input name is empty
-	    	if (textValue === '' && urlValue !== '') {
-    	    	inputTypeText.classList.add('error');
-    	    	inputTypeText.focus();
+	    	if ($textValue === '' && $urlValue !== '') {
+    	    	$inputTypeText.addClass('error').focus();
     	    	isValid = false;
     	    	isClosed = false;
-    	    	break;
+    	    	return;
 	    	}
-
 	    	// Add http prefix if omitted
-	    	if(urlValue !== ''){
-		    	if(urlValue.indexOf('http://') === -1){
-		    		urlValue = 'http://' + urlValue;
+	    	if($urlValue !== ''){
+		    	if($urlValue.indexOf('http://') === -1){
+		    		$urlValue = 'http://' + $urlValue;
 		    	}
 	    	}
-
 	    	// If input url is empty or invalid
-	    	if ((urlValue === '' || !isValidURL(urlValue)) && textValue !== '') {
-    	    	inputTypeUrl.classList.add('error');
-    	    	inputTypeUrl.focus();
+	    	if (($urlValue === '' || !isValidURL($urlValue)) && $textValue !== '') {
+    	    	$inputTypeUrl.addClass('error').focus();
     	    	isValid = false;
     	    	isClosed = false;
-    	    	break;
+    	    	return;
 	    	}
-
 	    	// If input name & input url are filled & valid
-		    if(textValue !== '' && (isValidURL(urlValue))){
-		    	inputTypeUrl.classList.remove('error');
+		    if($textValue !== '' && (isValidURL($urlValue))){
+		    	$inputTypeUrl.removeClass('error');
 		    	isValid = true;
 		    }
-
-
     		if(isValid){
-				currentSettingBtn.classList.remove('active');
-				hasClass(divContainer, 'hidden');
+    			$('[data-btn="' + dataAttr + '"]').removeClass('active');
+				$('[data-settings="' + dataAttr + '"]').hasClass('hidden');
 
 				// Create an option Node with array[i] content and append to selectBox
-				var option = document.createElement('option');
-				option.textContent = textValue;
-				option.value = urlValue;
-				currentSelectElm.appendChild(option);
+				var $option = $('<option>');
 
-				currentOpenInNewTabIcon.classList.remove('hidden');
-				currentSelectContainer.classList.remove('hidden');
-				currentIframeContainer.classList.remove('hidden');
+				$option.html($textValue).val($urlValue);
+				$currentSelectElm.append($option);
+				$('[data-expand="' + dataAttr + '"]').removeClass('hidden');
+				$('[data-selectContainer="' + dataAttr + '"]').removeClass('hidden');
+				$('[data-iframe="' + dataAttr + '"]').removeClass('hidden');
     		}
-
     		// In order to set other unfilled input to empty strings
     		else{
-    			textValue = '';
-    			urlValue = '';
+    			$textValue = '';
+    			$urlValue = '';
     		}
-
-			collectInputArray.push({name:textValue, url:urlValue});
-		}
-
+			collectInputArray.push({name:$textValue, url:$urlValue});
+		});
 		// If the array has at least one object
 	    if(collectInputArray.length > 0){
-
-	    	// If localStorage is supported:
-	    	// 1. Give reports a key based on form ID
-	    	// 2. Set the localStorageObject
-	    	if (localStorageSupported()) {
-	    		// Save it in localStorage, as a string
-				reports[dataAttr] = collectInputArray;
-				localStorage.setItem('reports', JSON.stringify(reports));
-	    	}
-
+			reports[dataAttr] = collectInputArray;
+			setReports(reports);
 	    	// Populate the selectbox and make sure to set selecetd index to the last option
-	    	populateIframe(dataAttr, currentSelectElm.options.length - 1);
-
+	    	populateIframe(dataAttr, $currentSelectElm.children().size() - 1);
 	    	// Close the containing form div
 	    	if(isClosed){
-		    	divContainer.classList.add('hidden');
+	    		$('[data-settings="' + dataAttr + '"]').addClass('hidden');
 	    	}
 	    }
 	};
@@ -393,6 +347,7 @@ $(function() {
 			}
 	};
 
+	// Init functions
 	getTab();
 	initReprots();
 
@@ -410,6 +365,11 @@ $(function() {
 	$('.choose-iframe-select').on('change', populateIframe);
 	$('.action-btn.expand').on('click', openInNewTab);
 
+
+//===================================================================
+// Ajax call
+//===================================================================
+
 	$.get('../webapp/data/notification.txt', function(){
 		console.log('success!');
 		})
@@ -422,6 +382,5 @@ $(function() {
 		.fail(function() {
 			console.log('faillll');
 		});
-
 
 });
