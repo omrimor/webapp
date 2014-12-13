@@ -1,4 +1,4 @@
-$(function() {
+window.onload = (function() {
 	'use strict';
 
 	var $tabList = $('[role="tablist"]'),
@@ -383,6 +383,6 @@ $(function() {
 			console.log('faillll');
 		});
 
-});
+})();
 
 //# sourceMappingURL=main.js.map
