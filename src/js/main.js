@@ -370,7 +370,7 @@ $(function(){
 // Ajax call
 //===================================================================
 
-	$.get('/data/notification.txt', function(){
+	$.get('/' + (location.href.indexOf('github.io') > 0 ? 'webapp/' : '') + 'data/notification.txt', function(){
 		console.log('success!');
 		})
 		.done(function(data) {
