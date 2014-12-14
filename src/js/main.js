@@ -1,4 +1,4 @@
-window.onload = (function() {
+$(function(){
 	'use strict';
 
 	var $tabList = $('[role="tablist"]'),
@@ -370,7 +370,7 @@ window.onload = (function() {
 // Ajax call
 //===================================================================
 
-	$.get('../../webapp/data/notification.txt', function(){
+	$.get('/data/notification.txt', function(){
 		console.log('success!');
 		})
 		.done(function(data) {
@@ -383,4 +383,4 @@ window.onload = (function() {
 			console.log('faillll');
 		});
 
-})();
+});
