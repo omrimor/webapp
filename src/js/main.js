@@ -325,13 +325,15 @@ $(function(){
 		var currentSelectBox = $('[data-select = "' + context + '"]').get()[0],
 			currentIndex = currentSelectBox.options[index ? index : currentSelectBox.selectedIndex];
 		    console.log(currentIndex, currentSelectBox);
-		 var optionVal = currentIndex.value;
+		 var optionVal = currentIndex && currentIndex.value;
 
 	    // If index is passed, set the selected index to it
-		if(index){
-	    	currentSelectBox.selectedIndex = index;
-		}
-		$('[data-iframe="' + context + '"]').attr('src', optionVal);
+	    if(optionVal){
+			if(index){
+		    	currentSelectBox.selectedIndex = index;
+			}
+			$('[data-iframe="' + context + '"]').attr('src', optionVal);
+	    }
 	};
 
 	var openInNewTab = function(e){
