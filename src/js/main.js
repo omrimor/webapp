@@ -323,11 +323,10 @@ $(function(){
 		}
 
 		var currentSelectBox = $('[data-select = "' + context + '"]').get()[0],
-			currentIndex = currentSelectBox.options[index ? index : currentSelectBox.selectedIndex];
-		    console.log(currentIndex, currentSelectBox);
-		 var optionVal = currentIndex && currentIndex.value;
+			currentIndex = currentSelectBox.options[index ? index : currentSelectBox.selectedIndex],
+		    optionVal = currentIndex && currentIndex.value;
 
-	    // If index is passed, set the selected index to it
+	    // If Option value exist & index is passed, set the selected index to it
 	    if(optionVal){
 			if(index){
 		    	currentSelectBox.selectedIndex = index;
