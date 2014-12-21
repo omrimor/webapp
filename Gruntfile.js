@@ -1,6 +1,12 @@
 module.exports = function(grunt){
 	'use strict';
 
+	var port = grunt.option('port') || 9003,
+		lrPort = grunt.option('lr-port') || 35731,
+		hostname = 'localhost',
+		baseFolder = '.';
+
+
 	// Display the elapsed execution time of grunt tasks
 	require('time-grunt')(grunt);
 	// Load all grunt-* packages from package.json
@@ -73,10 +79,12 @@ module.exports = function(grunt){
 		watch: {
 			// Will try to connect to a LiveReload script
 			options: {
-				livereload: '<%= server.liveReloadPort %>'
+				livereload: lrPort
 			},
 			configs: {
-				reload: true,
+				options: {
+					reload: true
+				},
 				files: ['Gruntfile.js', 'package.json']
 			},
 			targetJs: {
@@ -95,11 +103,12 @@ module.exports = function(grunt){
 		connect: {
 			server: {
 				options: {
-					port: '<%= server.port %>',
-					hostname: 'localhost',
+					port: port,
+					hostname: hostname,
 					target: 'http://localhost:<%= server.port %>',
-					base: '.',
-					livereload: '<%= server.liveReloadPort %>'
+					base: baseFolder,
+					livereload: lrPort,
+					open: true
 				}
 			}
 		}
@@ -108,7 +117,10 @@ module.exports = function(grunt){
 	grunt.registerTask('build-css', ['clean:css', 'sass']);
 	grunt.registerTask('build', ['clean:all', 'build-js', 'build-css']);
 
+	// Open local server and watch for file changes
+	grunt.registerTask('serve', ['connect', 'watch']);
+
 	// Default task(s)
-	grunt.registerTask('default', ['build', 'connect', 'watch']);
+	grunt.registerTask('default', ['build']);
 
 };

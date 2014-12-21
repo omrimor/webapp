@@ -1,0 +1,27 @@
+/* ==========================================================================
+   Mixins
+   ========================================================================== */
+
+@mixin prefixer($prop, $value) {
+	-webkit-#{$prop}: #{$value};
+	  -moz-#{$prop}: #{$value};
+	  -o-#{$prop}: #{$value};
+	  #{$prop}: #{$value};
+}
+
+@mixin arrowShape($dir, $reverseDir) {
+  border: 7px solid transparent;
+  display: inline-block;
+  height: 0;
+  width: 0;
+  border-#{$dir}: 0;
+  border-#{$reverseDir}-color: $black;
+}
+
+@mixin box-shadow($top, $left, $blur, $color, $inset: false) {
+  @if $inset {
+	  	@include prefixer(box-shadow, inset $top $left $blur $color);
+  } @else {
+	  	@include prefixer(box-shadow, $top $left $blur $color);
+  }
+}

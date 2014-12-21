@@ -1,0 +1,53 @@
+/* ==========================================================================
+   Page layout
+   ========================================================================== */
+
+html {
+   font-family: $font-family-body;
+   font-size: $font-size-base;
+   line-height: $line-height-base;
+   color: $body-text-color;
+}
+
+html,
+body {
+   height: $percentages-100;
+}
+
+body {
+    background: url(../../img/body-background.jpg) no-repeat center center fixed;
+    @include prefixer(background-size, cover);
+}
+
+header {
+    position: absolute;
+    z-index: $index-200;
+    left: 0;
+    right: 0;
+    background: $black;
+    height: 75px;
+}
+
+
+.layout-wrap {
+    position: absolute;
+    left: $percentages-1;
+    right: $percentages-1;
+    max-width: $max-width-outer;
+    min-width: $min-width-outer;
+    height: $percentages-100;
+    bottom: 0;
+    top: 0;
+    margin: 0 auto;
+    padding-top: 90px;
+}
+
+.content-wrap {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    min-width: $min-width-inner;
+    padding: 0 $percentages-1;
+}

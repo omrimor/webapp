@@ -1,0 +1,451 @@
+/* ==========================================================================
+   Modules
+   ========================================================================== */
+
+.logo {
+    position: absolute;
+    top: $size-20;
+    left: $size-20;
+    display: inline-block;
+    text-indent: -9999px;
+    width: 148px;
+    height: $size-30;
+    background: url(../../img/logo-netcraft.svg) no-repeat top left;
+}
+
+.no-svg .logo {
+    background: url(../../img/logo-netcraft.png) no-repeat top left;
+}
+
+.search-box {
+    position: absolute;
+    top: $size-20;
+    right: $size-20;
+}
+
+input[name="q"] {
+    width: ($size-30*7);
+    height: $size-30;
+    padding: 0 $size-10;
+    font-size: $font-size-8;
+    outline: 0;
+}
+
+input[name="q"]:focus {
+    color: $black;
+}
+
+.page-body {
+    background: rgba(0, 0, 0, 0.3);
+    overflow: auto;
+}
+
+
+.notifications {
+    position: relative;
+    background: $brand-grey;
+    width: 96.5%;
+    height: ($size-30+6);
+    padding: 0 $percentages-1;
+    margin: 0 auto;
+    margin-bottom: $size-20;
+    line-height: ($size-30+6);
+    font-size: $font-size-8;
+}
+
+nav {
+    position: relative;
+    margin: 0 auto;
+    width: $percentages-100;
+    padding: 0 $percentages-1;
+}
+
+.nav-section {
+    position: relative;
+    float: left;
+    width: ($percentages-30+$percentages-1);
+    height: ($size-30*5);
+    margin-left: 2.65625%;
+    background-color: $black;
+    @include prefixer(transition, all .5s ease);
+
+    &:hover {
+        cursor: pointer;
+        overflow: inherit;
+    }
+
+    &:first-child {
+        margin-left: 0;
+    }
+
+    > p {
+        color: $white;
+        text-align: center;
+        font-size: $font-size-base;
+        line-height: $line-height-base;
+        margin-top: $size-10;
+    }
+}
+
+.ns-reporting,
+.ns-dashboard,
+.ns-faq {
+    background-repeat: no-repeat;
+    background-position: ($percentages-100/2) 75px;
+}
+
+.ns-dashboard {
+    background-image: url(../../img/action-report-top.png);
+}
+
+.ns-faq {
+    background-image: url(../../img/actions-help.png);
+}
+
+.ns-reporting {
+    background-image: url(../../img/action-report-new.png);
+}
+
+.menu {
+    position: absolute;
+    z-index: $index-100;
+    bottom: 0;
+    left: 0;
+    width: $percentages-100;
+    height: ($size-30+6);
+    background: darken($brand-grey, 5%);
+    font-size: $font-size-8;
+    padding: 0 $size-20;
+}
+
+
+.menu-hint {
+    display: inline-block;
+    height: inherit;
+    line-height: ($line-height-base/2);
+}
+
+.arrow {
+    position: absolute;
+    top: ($size-10+5);
+    right: $size-20;
+    width: 0;
+    height: 0;
+    @include arrowShape(bottom, top);
+}
+
+.arrow__is-animating {
+    @include prefixer(transform, rotateZ(0));
+    @include prefixer(transition, all .4s ease);
+}
+
+.nav-section:hover .arrow.arrow__is-animating {
+    @include prefixer(transform, rotateZ(180deg));
+}
+
+.action-list {
+    position: absolute;
+    top: ($size-30+6);
+    left: 0;
+    width: $percentages-100;
+    height: 0;
+    overflow: hidden;
+    @include box-shadow(0, 0, 3px, rgba(0, 0, 0, 0.5));
+    @include prefixer(transition, height .4s ease);
+}
+
+.nav-section:hover .action-list {
+    height: ($size-30*6);
+}
+
+.action-list li {
+    width: $percentages-100;
+    height: ($size-30+6);
+    font-size: $font-size-8;
+    border-top: 1px solid darken($brand-grey, 20%);
+    line-height: ($size-30+6);
+}
+
+.action-list li > a {
+    background: $brand-grey;
+    color: inherit;
+    display: block;
+    padding: 0 $size-20;
+    text-decoration: none;
+
+    &:hover {
+        background: darken($brand-grey, 3%);
+    }
+}
+
+.tabs {
+    position: absolute;
+    top: ($size-40*6);
+    left: ($size-10+5);
+    right: ($size-10+5);
+    bottom: 0;
+    height: $percentages-100;
+}
+
+.tab-headers {
+    width: inherit;
+}
+
+.tab-headers li {
+    float: left;
+    width: 23.85%;
+    height: $size-50;
+    margin-left: $percentages-1;
+    line-height: $size-50;
+    text-align: center;
+    font-size: $font-size-8;
+
+    &:first-child {
+        margin-left: 0;
+    }
+}
+
+.tab-headers li > a {
+    background: darken($brand-grey, 60%);
+    color: $white;
+    display: block;
+    font-size: inherit;
+    text-decoration: none;
+
+    &:hover, &:focus {
+        background: darken($brand-grey, 70%);
+    }
+
+    &.active {
+        color: inherit;
+        background: $brand-grey;
+    }
+}
+
+.tab-content {
+    display: none;
+    position: absolute;
+    bottom: 0;
+    top: $size-50;
+    width: $percentages-100;
+    background: $brand-grey;
+
+    &.active {
+        display: block;
+    }
+}
+
+.tab-content-header {
+    height: $size-40;
+    width: $percentages-100;
+    padding-top: $size-20;
+    position: relative;
+}
+
+.select--choose-iframe {
+    width: ($size-40*7);
+    position: relative;
+    display: inline-block;
+    height: ($size-30+6);
+    background: $white;
+    overflow: hidden;
+    font-size: $font-size-8;
+    border: 1px solid $white;
+    line-height: ($line-height-base+.2);
+
+    &:after {
+        content:'';
+        width: ($size-10+8);
+        height: $size-10;
+        display: block;
+        position: absolute;
+        top: ($size-10+4);
+        right: ($size-5+2);
+        background-image: url(../../img/select-arrow.png);
+        background-repeat: no-repeat;
+    }
+
+    &:hover {
+        border-color: darken($brand-grey, 15%);
+        cursor: pointer;
+    }
+}
+
+%button {
+    position: absolute;
+    top: $size-20;
+    width: $size-40;
+    height: $size-40;
+    display: inline-block;
+    text-indent: -9999px;
+    background-repeat: no-repeat;
+    background-position: $percentages-50 $percentages-50;
+
+    &:hover {
+        background-color: $white;
+    }
+
+    &.active {
+        background-color: $white;
+    }
+}
+
+
+.action-btn {
+    @extend %button;
+
+    &.settings {
+        z-index: $index-50;
+        background-image: url(../../img/settings.png);
+        right: 0;
+    }
+
+    &.expand {
+        background-image: url(../../img/expand.png);
+        right: $size-40;
+    }
+
+    &.stand__alone {
+        right: 0;
+    }
+}
+
+.tab-content-body {
+    position: absolute;
+    top: ($size-50+20);
+    bottom: 0;
+    left: 0;
+    right: 0;
+    padding: 0 $percentages-1;
+    margin-bottom: $size-30;
+}
+
+.tab-content-body--iframe {
+    width: $percentages-100;
+    height: $percentages-100;
+    background-color: $brand-grey;
+}
+
+.tab-content-settings {
+    min-width: $min-width-inner;
+    position: absolute;
+    top: ($size-50+10);
+    left: $percentages-1;
+    right: $percentages-1;
+    z-index: $index-50;
+    @include box-shadow(0, 0, 3px, rgba(0, 0, 0, 0.1));
+    background-color: $white;
+    height: 242px;
+    padding: $size-20 $percentages-1;
+}
+
+.tab-content-settings--input-container {
+    position: relative;
+    width: $percentages-100;
+    background-color: darken($brand-grey, 2%);
+    color: inherit;
+    height: ($size-40+5);
+    font-size: $font-size-8;
+    line-height: ($size-40+5);
+    padding: 0 $percentages-1;
+    margin-bottom: $size-10;
+}
+
+.fs-name {
+    float: left;
+    width: ($percentages-10/2);
+    min-width: ($size-50+30);
+}
+
+.input-name {
+    position: absolute;
+    top: 0;
+    left: 0;
+    display: inline-block;
+    width: 8%;
+    min-width: $size-40;
+}
+
+.input-wrap {
+    position: relative;
+    float: left;
+    height: ($size-40+5);
+    width: $percentages-40;
+    margin-left: ($percentages-1*2);
+    display: inline-block;
+}
+
+.settings-field {
+    position: absolute;
+    top: ($size-5+2);
+    right: 0;
+    display: inline-block;
+    width: 89%;
+    height: $size-30;
+    outline: 0;
+    border: 1px solid $white;
+    background-color: $white;
+    font-size: inherit;
+    padding: 0 $percentages-1;
+    margin-left: $percentages-1;
+
+    &:hover, &:focus {
+        border-color: darken($brand-grey, 10%);
+    }
+}
+
+.settings-footer {
+    width: $percentages-100;
+    position: relative;
+    margin-top: $size-10;
+    height: $size-30;
+    font-size: $font-size-8;
+}
+
+%btn-base {
+    width: ($size-30*3);
+    height: $size-30;
+    font-size: $font-size-8;
+    text-transform: uppercase;
+    color: $white;
+    background-color: darken($brand-grey, 75%);
+    outline: 0;
+    border: 0;
+}
+
+.btn {
+    @extend %btn-base;
+}
+
+.btn__submit-form {
+    @extend %btn-base;
+    position: absolute;
+    top: 0;
+    right: 0;
+
+    &:hover {
+        background-color: darken($brand-grey, 95%);
+    }
+}
+
+.link {
+    color: inherit;
+    font-size: inherit;
+
+    &:hover {
+        color: $black;
+        font-weight: $bold-font;
+    }
+}
+
+.cancel-form {
+    position: absolute;
+    top: $size-5;
+    right: ($size-100+10);
+}
+
+.settings-field:focus.error,
+.error {
+    border-color: $red;
+}
+
