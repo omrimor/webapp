@@ -252,6 +252,7 @@ $(function(){
 		    	if(emptyCount === $fieldsets.size()){
 			    	$($fieldsets.eq(0).find('input')[0]).addClass('error').focus();
 			    	isValid = false;
+			    	isClosed = false;
 			    	localStorage.clear();
 		    	}
 		    }
