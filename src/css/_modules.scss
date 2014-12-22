@@ -8,7 +8,7 @@
     left: $size-20;
     display: inline-block;
     text-indent: -9999px;
-    width: 148px;
+    width: ($size-30*5);
     height: $size-30;
     background: url(../../img/logo-netcraft.svg) no-repeat top left;
 }
@@ -44,7 +44,7 @@ input[name="q"]:focus {
 .notifications {
     position: relative;
     background: $brand-grey;
-    width: 96.5%;
+    width: ($percentages-100)-($percentages-1*2);
     height: ($size-30+6);
     padding: 0 $percentages-1;
     margin: 0 auto;
@@ -164,18 +164,22 @@ nav {
     font-size: $font-size-8;
     border-top: 1px solid darken($brand-grey, 20%);
     line-height: ($size-30+6);
+
+    > a {
+        background: $brand-grey;
+        color: inherit;
+        display: block;
+        padding: 0 $size-20;
+        text-decoration: none;
+
+        &:hover {
+            background: darken($brand-grey, 3%);
+        }
+    }
 }
 
-.action-list li > a {
-    background: $brand-grey;
-    color: inherit;
-    display: block;
-    padding: 0 $size-20;
-    text-decoration: none;
-
-    &:hover {
-        background: darken($brand-grey, 3%);
-    }
+.tab-headers {
+    width: inherit;
 }
 
 .tabs {
@@ -185,27 +189,23 @@ nav {
     right: ($size-10+5);
     bottom: 0;
     height: $percentages-100;
-}
 
-.tab-headers {
-    width: inherit;
-}
+    & li {
+        float: left;
+        width: 23.85%;
+        height: $size-50;
+        margin-left: $percentages-1;
+        line-height: $size-50;
+        text-align: center;
+        font-size: $font-size-8;
 
-.tab-headers li {
-    float: left;
-    width: 23.85%;
-    height: $size-50;
-    margin-left: $percentages-1;
-    line-height: $size-50;
-    text-align: center;
-    font-size: $font-size-8;
-
-    &:first-child {
-        margin-left: 0;
+        &:first-child {
+            margin-left: 0;
+        }
     }
 }
 
-.tab-headers li > a {
+a[role="tab"] {
     background: darken($brand-grey, 60%);
     color: $white;
     display: block;
@@ -271,7 +271,33 @@ nav {
     }
 }
 
-%button {
+%btn-base {
+    width: ($size-30*3);
+    height: $size-30;
+    font-size: $font-size-8;
+    text-transform: uppercase;
+    color: $white;
+    background-color: darken($brand-grey, 75%);
+    outline: 0;
+    border: 0;
+}
+
+.btn {
+    @extend %btn-base;
+}
+
+.btn__submit-form {
+    @extend %btn-base;
+    position: absolute;
+    top: 0;
+    right: 0;
+
+    &:hover {
+        background-color: darken($brand-grey, 95%);
+    }
+}
+
+%btn-square {
     position: absolute;
     top: $size-20;
     width: $size-40;
@@ -292,7 +318,7 @@ nav {
 
 
 .action-btn {
-    @extend %button;
+    @extend %btn-square;
 
     &.settings {
         z-index: $index-50;
@@ -335,7 +361,7 @@ nav {
     z-index: $index-50;
     @include box-shadow(0, 0, 3px, rgba(0, 0, 0, 0.1));
     background-color: $white;
-    height: 242px;
+    height: ($size-40*6);
     padding: $size-20 $percentages-1;
 }
 
@@ -362,7 +388,7 @@ nav {
     top: 0;
     left: 0;
     display: inline-block;
-    width: 8%;
+    width: ($percentages-1*3);
     min-width: $size-40;
 }
 
@@ -380,7 +406,7 @@ nav {
     top: ($size-5+2);
     right: 0;
     display: inline-block;
-    width: 89%;
+    width: ($percentages-30*3);
     height: $size-30;
     outline: 0;
     border: 1px solid $white;
@@ -400,32 +426,6 @@ nav {
     margin-top: $size-10;
     height: $size-30;
     font-size: $font-size-8;
-}
-
-%btn-base {
-    width: ($size-30*3);
-    height: $size-30;
-    font-size: $font-size-8;
-    text-transform: uppercase;
-    color: $white;
-    background-color: darken($brand-grey, 75%);
-    outline: 0;
-    border: 0;
-}
-
-.btn {
-    @extend %btn-base;
-}
-
-.btn__submit-form {
-    @extend %btn-base;
-    position: absolute;
-    top: 0;
-    right: 0;
-
-    &:hover {
-        background-color: darken($brand-grey, 95%);
-    }
 }
 
 .link {

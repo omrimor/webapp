@@ -2,15 +2,6 @@
    Settings
    ========================================================================== */
 
-// Font family
-$font-family-body: 'Open Sans', sans-serif;
-
-$bold-font: 700;
-
-
-// The base font-size, all other elements will adjust to this value
-$font-size-base: 1rem;
-$font-size-8: .8rem;
 
 
 // COLORS
@@ -27,6 +18,7 @@ $line-height-base: 1.4;
 // Adjust the website's maximum width.
 $max-width-outer: 1320px;
 $max-width-inner: 1140px;
+$min-width-ie: 1024px;
 $min-width-outer: 640px;
 $min-width-inner: 600px;
 

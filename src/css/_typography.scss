@@ -4,3 +4,14 @@
 
 /*import google font - open sans*/
 @import url(http://fonts.googleapis.com/css?family=Open+Sans:400,300,600,700);
+
+
+// Font family
+$font-family-body: 'Open Sans', sans-serif;
+
+$bold-font: 700;
+
+
+// The base font-size, all other elements will adjust to this value
+$font-size-base: 1rem;
+$font-size-8: .8rem;
