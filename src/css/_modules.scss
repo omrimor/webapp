@@ -87,24 +87,44 @@ nav {
     }
 }
 
-.ns-reporting,
-.ns-dashboard,
-.ns-faq {
+// .ns-reporting,
+// .ns-dashboard,
+// .ns-faq {
+//     background-repeat: no-repeat;
+//     background-position: ($percentages-100/2) 75px;
+// }
+
+// .ns-dashboard {
+//     background-image: url(../../img/action-report-top.png);
+// }
+
+// .ns-faq {
+//     background-image: url(../../img/actions-help.png);
+// }
+
+// .ns-reporting {
+//     background-image: url(../../img/action-report-new.png);
+// }
+
+.ns-action-report-new,
+.ns-action-report-top,
+.ns-actions-help {
     background-repeat: no-repeat;
     background-position: ($percentages-100/2) 75px;
 }
 
-.ns-dashboard {
+.ns-action-report-top {
     background-image: url(../../img/action-report-top.png);
 }
 
-.ns-faq {
+.ns-actions-help {
     background-image: url(../../img/actions-help.png);
 }
 
-.ns-reporting {
+.ns-action-report-new {
     background-image: url(../../img/action-report-new.png);
 }
+
 
 .menu {
     position: absolute;
@@ -145,17 +165,16 @@ nav {
 
 .action-list {
     position: absolute;
-    top: ($size-30+6);
     left: 0;
     width: $percentages-100;
-    height: 0;
+    max-height: 0;
     overflow: hidden;
     @include box-shadow(0, 0, 3px, rgba(0, 0, 0, 0.5));
-    @include prefixer(transition, height .4s ease);
+    @include prefixer(transition, max-height .4s ease);
 }
 
 .nav-section:hover .action-list {
-    height: ($size-30*6);
+    max-height: ($size-100+$size-50);
 }
 
 .action-list li {

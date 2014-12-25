@@ -87,7 +87,8 @@
     // Custom Globals
      "globals"       : {         // additional predefined global variables
         "UTILS" : true,
-        "Modernizr" : true
+        "Modernizr" : true,
+        "Handlebars" : true
 
     }
 }

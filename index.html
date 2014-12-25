@@ -35,56 +35,26 @@
             <span data-span="notificationTxt"></span>
         </div>
 
-        <nav class="cf" role="navigation">
-            <div class="nav-section ns-reporting">
-                <p>Select<br>Reporting Platform</p>
-                <div class="menu">
-                    <div class="menu-hint">
-                        <p>Choose QS report</p>
-                        <div class="arrow arrow__is-animating"></div>
+        <nav id="nav" class="cf" role="navigation"></nav>
+
+        <script id="navTmpl" type="text/template">
+            {{#each this}}
+                <div class="nav-section ns-{{icon}}">
+                    <p>{{label}}</p>
+                    <div class="menu">
+                        <div class="menu-hint">
+                            <p>{{actionsLabel}}</p>
+                            <div class="arrow arrow__is-animating"></div>
+                        </div>
+                        <ul class="action-list">
+                        {{#each actions}}
+                            <li><a href={{url}}>{{label}}</a></li>
+                        {{/each}}
+                        </ul>
                     </div>
-                    <ul class="action-list">
-                        <li><a href="#">link</a></li>
-                        <li><a href="#">link</a></li>
-                        <li><a href="#">link</a></li>
-                        <li><a href="#">link</a></li>
-                        <li><a href="#">link</a></li>
-                    </ul>
                 </div>
-            </div>
-            <div class="nav-section ns-dashboard">
-                <p>Select<br>Dashboard</p>
-                <div class="menu">
-                    <div class="menu-hint">
-                        <p>Choose dashboard</p>
-                        <div class="arrow arrow__is-animating"></div>
-                    </div>
-                    <ul class="action-list">
-                        <li><a href="#">link</a></li>
-                        <li><a href="#">link</a></li>
-                        <li><a href="#">link</a></li>
-                        <li><a href="#">link</a></li>
-                        <li><a href="#">link</a></li>
-                    </ul>
-                </div>
-            </div>
-            <div class="nav-section ns-faq">
-                <p>Help &amp;<br>Tutorials</p>
-                <div class="menu">
-                    <div class="menu-hint">
-                        <p>Choose guide</p>
-                        <div class="arrow arrow__is-animating"></div>
-                    </div>
-                    <ul class="action-list">
-                        <li><a href="#">link</a></li>
-                        <li><a href="#">link</a></li>
-                        <li><a href="#">link</a></li>
-                        <li><a href="#">link</a></li>
-                        <li><a href="#">link</a></li>
-                    </ul>
-                </div>
-            </div>
-        </nav>
+            {{/each}}
+        </script>
 
         <div class="tabs" role="tablist">
             <ul class="tab-headers cf">
@@ -151,7 +121,11 @@
                         <iframe class="tab-content-body--iframe hidden" frameborder="0" data-iframe="qrSettings"></iframe>
                     </div>
                 </div>
+
+
             </div>
+
+
             <div role="tabpanel" class="tab-content" id="fmy-folders">
                 <div class="content-wrap cf">
                     <div class="tab-content-header">
@@ -232,6 +206,7 @@
         <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
         <script>window.jQuery || document.write('<script src="vendor/js/jquery-1.11.1.min.js"><\/script>')</script>
         <script src="vendor/js/placeholders.min.js"></script>
+         <script src="//cdnjs.cloudflare.com/ajax/libs/handlebars.js/2.0.0/handlebars.min.js"></script>
         <script src="public/js/main.min.js"></script>
     </body>
 </html>

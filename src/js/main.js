@@ -4,7 +4,8 @@ $(function(){
 	var $tabList = $('[role="tablist"]'),
 		$selectBox = $('.choose-iframe-select'),
 		$notification = $('.notifications'),
-		$notificationMsg = $('[data-span="notificationTxt"]');
+		$notificationMsg = $('[data-span="notificationTxt"]'),
+		initApp;
 
 //===================================================================
 // Define helper functions
@@ -42,6 +43,7 @@ $(function(){
 		}
 		return true;
 	};
+
 
 //===================================================================
 // Handler functions
@@ -350,9 +352,63 @@ $(function(){
 			}
 	};
 
-	// Init functions
-	getTab();
-	initReprots();
+
+	initApp = (function() {
+
+		$.getJSON('/' + (location.href.indexOf('github.io') > 0 ? 'webapp/' : '') +
+		'data/config.json', function(){
+			// console.log(data.notification);
+
+			})
+			.done(function(data) {
+				if(data){
+					var notification = data.notification,
+						quickActions = data.quickActions,
+						tabsList = data.tabsList,
+						sourceNav,
+						templateNav,
+						htmlNav,
+						sourceSettings,
+						templateSettings,
+						htmlSettings;
+
+
+					// Notification text
+					$notification.removeClass('hidden');
+					$notificationMsg.html(notification);
+					$tabList.css({'top': '330px'});
+
+					// Handlebars
+
+					// Get the template HTML for section-nav
+					sourceNav = $('#navTmpl').html();
+					// Compile that HTML to prepare for processing
+					templateNav = Handlebars.compile(sourceNav);
+					// Process the templateNav, return resulting HTML string
+					htmlNav = templateNav(quickActions);
+					$('#nav').html(htmlNav);
+
+					// Get the template HTML for settings
+					sourceSettings = $('#settingTmpl').html();
+					// Compile that HTML to prepare for processing
+					templateSettings = Handlebars.compile(sourceSettings);
+					// Process the templateNav, return resulting HTML string
+					htmlSettings = templateSettings(tabsList);
+					$('#settings').html(htmlSettings);
+
+					console.log(tabsList[0].options.rowLabel);
+				}
+			})
+			.fail(function(err) {
+				console.log(err);
+			});
+
+		// Init functions
+		getTab();
+		initReprots();
+
+	}());
+
 
 //===================================================================
 // Event handlers
@@ -369,21 +425,6 @@ $(function(){
 	$('.action-btn.expand').on('click', openInNewTab);
 
 
-//===================================================================
-// Ajax call
-//===================================================================
-
-	$.get('/' + (location.href.indexOf('github.io') > 0 ? 'webapp/' : '') + 'data/notification.txt', function(){
-		console.log('success!');
-		})
-		.done(function(data) {
-			console.log('success again!');
-			$notification.removeClass('hidden');
-			$notificationMsg.html(data);
-			$tabList.css({'top': '330px'});
-		})
-		.fail(function() {
-			console.log('faillll');
-		});
-
 });
+
+
