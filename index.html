@@ -40,7 +40,7 @@
         <script id="navTmpl" type="text/template">
             {{#each this}}
                 <div class="nav-section ns-{{icon}}">
-                    <p>{{label}}</p>
+                    <p>{{{label}}}</p>
                     <div class="menu">
                         <div class="menu-hint">
                             <p>{{actionsLabel}}</p>
@@ -54,6 +54,11 @@
                     </div>
                 </div>
             {{/each}}
+        </script>
+
+        <div id="tabs" class="tabs" role="tablist"></div>
+        <script id="tabsTmpl" type="text/template">
+
         </script>
 
         <div class="tabs" role="tablist">
@@ -121,11 +126,7 @@
                         <iframe class="tab-content-body--iframe hidden" frameborder="0" data-iframe="qrSettings"></iframe>
                     </div>
                 </div>
-
-
             </div>
-
-
             <div role="tabpanel" class="tab-content" id="fmy-folders">
                 <div class="content-wrap cf">
                     <div class="tab-content-header">

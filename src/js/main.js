@@ -389,14 +389,14 @@ $(function(){
 					$('#nav').html(htmlNav);
 
 					// Get the template HTML for settings
-					sourceSettings = $('#settingTmpl').html();
+					sourceSettings = $('#tabsTmpl').html();
 					// Compile that HTML to prepare for processing
 					templateSettings = Handlebars.compile(sourceSettings);
 					// Process the templateNav, return resulting HTML string
 					htmlSettings = templateSettings(tabsList);
-					$('#settings').html(htmlSettings);
+					$('#tabs').html(htmlSettings);
 
-					console.log(tabsList[0].options.rowLabel);
+					console.log(tabsList[0].options);
 				}
 			})
 			.fail(function(err) {
