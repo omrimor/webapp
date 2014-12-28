@@ -396,34 +396,30 @@ $(function(){
 					htmlSettings = templateSettings(tabsList);
 					$('#tabs').html(htmlSettings);
 
-					console.log(tabsList[0].options);
+					// Init functions
+					getTab();
+					initReprots();
+
+					//===================================================================
+					// Event handlers
+					//===================================================================
+
+					$('.tab-headers').on('click keypress', changeHash);
+					$(window).on('hashchange', getTab);
+					$('input[name="q"]').on('keyup', findReports);
+					$('.action-btn.settings').on('click', toggleSettings);
+					$('.link.cancel-form').on('click', cancelForm);
+					$('.btn.btn__submit-form').on('click', saveInput);
+					$('.tab-content-settings').on('keyup', escToClose);
+					$('.choose-iframe-select').on('change', populateIframe);
+					$('.action-btn.expand').on('click', openInNewTab);
 				}
 			})
 			.fail(function(err) {
 				console.log(err);
 			});
 
-		// Init functions
-		getTab();
-		initReprots();
-
 	}());
-
-
-//===================================================================
-// Event handlers
-//===================================================================
-
-	$('.tab-headers').on('click keypress', changeHash);
-	$(window).on('hashchange', getTab);
-	$('input[name="q"]').on('keyup', findReports);
-	$('.action-btn.settings').on('click', toggleSettings);
-	$('.link.cancel-form').on('click', cancelForm);
-	$('.btn.btn__submit-form').on('click', saveInput);
-	$('.tab-content-settings').on('keyup', escToClose);
-	$('.choose-iframe-select').on('change', populateIframe);
-	$('.action-btn.expand').on('click', openInNewTab);
-
 
 });
 

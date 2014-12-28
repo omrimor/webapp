@@ -36,7 +36,6 @@
         </div>
 
         <nav id="nav" class="cf" role="navigation"></nav>
-
         <script id="navTmpl" type="text/template">
             {{#each this}}
                 <div class="nav-section ns-{{icon}}">
@@ -58,11 +57,7 @@
 
         <div id="tabs" class="tabs" role="tablist"></div>
         <script id="tabsTmpl" type="text/template">
-
-        </script>
-
-        <div class="tabs" role="tablist">
-            <ul class="tab-headers cf">
+           <ul class="tab-headers cf">
                 <li><a role="tab" href="#quick-reports" data-link="qrSettings"><i class="fa fa-external-link"></i> Quick Reports</a>
                 </li>
                 <li><a role="tab" href="#fmy-folders"><i class="fa fa-star-o"></i> My Folders</a>
@@ -72,139 +67,119 @@
                 <li><a role="tab" href="#public-folders"><i class="fa fa-file-o"></i> Public Folders</a>
                 </li>
             </ul>
-            <div role="tabpanel" class="tab-content" id="quick-reports" data-div="qrSettings">
-                <div class="content-wrap cf">
-                    <div class="tab-content-settings" data-settings="qrSettings">
-                        <form action="">
-                            <fieldset class="tab-content-settings--input-container">
-                                    <span class="fs-name">Report 01</span>
-                                    <div class="input-wrap">
-                                        <label class="input-name" for="name01">Name:</label>
-                                        <input class="settings-field" type="text" id="name01">
+
+            {{#each this}}
+                {{#if options.rowLabel}}
+                    {{#if @first}}
+                    <div role="tabpanel" class="tab-content" id="quick-reports" data-div="qrSettings">
+                    {{else}}
+                    <div role="tabpanel" class="tab-content" id="my-team-folders" data-div="mtfSettings">
+                    {{/if}}
+                        <div class="content-wrap cf">
+                        {{#if @first}}
+                            <div class="tab-content-settings" data-settings="qrSettings">
+                        {{else}}
+                            <div class="tab-content-settings" data-settings="mtfSettings">
+                        {{/if}}
+                                <form action="">
+                                    <fieldset class="tab-content-settings--input-container">
+                                            <span class="fs-name">{{options.rowLabel}} 01</span>
+                                            <div class="input-wrap">
+                                                <label class="input-name" for="name01">Name:</label>
+                                                <input class="settings-field" type="text" id="name01">
+                                            </div>
+                                            <div class="input-wrap">
+                                                <label class="input-name" for="url01">URL:</label>
+                                                <input class="settings-field" type="url" id="url01" placeholder="http://...">
+                                            </div>
+                                    </fieldset>
+                                    <fieldset class="tab-content-settings--input-container">
+                                            <span class="fs-name">{{options.rowLabel}} 02</span>
+                                            <div class="input-wrap">
+                                                <label class="input-name" for="name02">Name:</label>
+                                                <input class="settings-field" type="text" id="name02">
+                                            </div>
+                                            <div class="input-wrap">
+                                                <label class="input-name" for="url02">URL:</label>
+                                                <input class="settings-field" type="url" id="url02" placeholder="http://...">
+                                            </div>
+                                    </fieldset>
+                                    <fieldset class="tab-content-settings--input-container">
+                                            <span class="fs-name">{{options.rowLabel}} 03</span>
+                                            <div class="input-wrap">
+                                                <label class="input-name" for="name03">Name:</label>
+                                                <input class="settings-field" type="text" id="name03">
+                                            </div>
+                                            <div class="input-wrap">
+                                                <label class="input-name" for="url03">URL:</label>
+                                                <input class="settings-field" type="url" id="url03" placeholder="http://...">
+                                            </div>
+                                    </fieldset>
+                                    <div class="settings-footer">
+                                    {{#if @first}}
+                                        <a href="#" class="link cancel-form" data-link="qrSettings">cancel</a>
+                                        <button type="submit" class="btn btn__submit-form" data-form="qrSettings">save</button>
+                                    {{else}}
+                                        <a href="#" class="link cancel-form" data-link="mtfSettings">cancel</a>
+                                        <button type="submit" class="btn btn__submit-form" data-form="mtfSettings">save</button>
+                                    {{/if}}
                                     </div>
-                                    <div class="input-wrap">
-                                        <label class="input-name" for="url01">URL:</label>
-                                        <input class="settings-field" type="url" id="url01" placeholder="http://...">
-                                    </div>
-                            </fieldset>
-                            <fieldset class="tab-content-settings--input-container">
-                                    <span class="fs-name">Report 02</span>
-                                    <div class="input-wrap">
-                                        <label class="input-name" for="name02">Name:</label>
-                                        <input class="settings-field" type="text" id="name02">
-                                    </div>
-                                    <div class="input-wrap">
-                                        <label class="input-name" for="url02">URL:</label>
-                                        <input class="settings-field" type="url" id="url02" placeholder="http://...">
-                                    </div>
-                            </fieldset>
-                            <fieldset class="tab-content-settings--input-container">
-                                    <span class="fs-name">Report 03</span>
-                                    <div class="input-wrap">
-                                        <label class="input-name" for="name03">Name:</label>
-                                        <input class="settings-field" type="text" id="name03">
-                                    </div>
-                                    <div class="input-wrap">
-                                        <label class="input-name" for="url03">URL:</label>
-                                        <input class="settings-field" type="url" id="url03" placeholder="http://...">
-                                    </div>
-                            </fieldset>
-                            <div class="settings-footer">
-                            <a href="#" class="link cancel-form" data-link="qrSettings">cancel</a>
-                                <button type="submit" class="btn btn__submit-form" data-form="qrSettings">save</button>
+                                </form>
                             </div>
-                        </form>
-                    </div>
-                    <div class="tab-content-header">
-                        <div class="select--choose-iframe hidden" data-selectContainer="qrSettings">
-                            <select name="choose-iframe" class="choose-iframe-select" data-select="qrSettings"></select>
-                        </div>
-                        <a class="action-btn expand hidden" href="#" data-expand="qrSettings">expand</a>
-                        <a class="action-btn settings active" data-btn="qrSettings" href="#">settings</a>
-                    </div>
-                    <div class="tab-content-body">
-                        <iframe class="tab-content-body--iframe hidden" frameborder="0" data-iframe="qrSettings"></iframe>
-                    </div>
-                </div>
-            </div>
-            <div role="tabpanel" class="tab-content" id="fmy-folders">
-                <div class="content-wrap cf">
-                    <div class="tab-content-header">
-                        <a class="action-btn expand stand__alone" href="#" data-expand="generic">expand</a>
-                    </div>
-                    <div class="tab-content-body">
-                        <iframe class="tab-content-body--iframe" src="http://www.paulirish.com/" frameborder="0" data-iframe="generic"></iframe>
-                    </div>
-                </div>
-            </div>
-            <div role="tabpanel" class="tab-content" id="my-team-folders" data-div="mtfSettings">
-                <div class="content-wrap cf">
-                    <div class="tab-content-settings" data-settings="mtfSettings">
-                        <form action="">
-                            <fieldset class="tab-content-settings--input-container cf">
-                                    <span class="fs-name">Report 01</span>
-                                    <div class="input-wrap">
-                                        <label class="input-name" for="name01">Name:</label>
-                                        <input class="settings-field" type="text" id="name01">
-                                    </div>
-                                    <div class="input-wrap">
-                                        <label class="input-name" for="url01">URL:</label>
-                                        <input class="settings-field" type="url" id="url01" placeholder="http://...">
-                                    </div>
-                            </fieldset>
-                            <fieldset class="tab-content-settings--input-container">
-                                    <span class="fs-name">Report 02</span>
-                                    <div class="input-wrap">
-                                        <label class="input-name" for="name02">Name:</label>
-                                        <input class="settings-field" type="text" id="name02">
-                                    </div>
-                                    <div class="input-wrap">
-                                        <label class="input-name" for="url02">URL:</label>
-                                        <input class="settings-field" type="url" id="url02" placeholder="http://...">
-                                    </div>
-                            </fieldset>
-                            <fieldset class="tab-content-settings--input-container">
-                                    <span class="fs-name">Report 03</span>
-                                    <div class="input-wrap">
-                                        <label class="input-name" for="name03">Name:</label>
-                                        <input class="settings-field" type="text" id="name03">
-                                    </div>
-                                    <div class="input-wrap">
-                                        <label class="input-name" for="url03">URL:</label>
-                                        <input class="settings-field" type="url" id="url03" placeholder="http://...">
-                                    </div>
-                            </fieldset>
-                            <div class="settings-footer">
-                            <a href="#" class="link cancel-form" data-link="mtfSettings">cancel</a>
-                                <button type="submit" class="btn btn__submit-form" data-form="mtfSettings">save</button>
+                            <div class="tab-content-header">
+                            {{#if @first}}
+                                <div class="select--choose-iframe hidden" data-selectContainer="qrSettings">
+                                    <select name="choose-iframe" class="choose-iframe-select" data-select="qrSettings"></select>
+                                </div>
+                                <a class="action-btn expand hidden" href="#" data-expand="qrSettings">expand</a>
+                                <a class="action-btn settings active" data-btn="qrSettings" href="#">settings</a>
+                            {{else}}
+                                <div class="select--choose-iframe hidden" data-selectContainer="mtfSettings">
+                                    <select name="choose-iframe" class="choose-iframe-select" data-select="mtfSettings"></select>
+                                </div>
+                                <a class="action-btn expand hidden" href="#" data-expand="mtfSettings">expand</a>
+                                <a class="action-btn settings active" href="#" data-btn="mtfSettings">settings</a>
+                            {{/if}}
                             </div>
-                        </form>
-                    </div>
-                    <div class="tab-content-header">
-                        <div class="select--choose-iframe hidden" data-selectContainer="mtfSettings">
-                            <select name="choose-iframe" class="choose-iframe-select" data-select="mtfSettings"></select>
+                            <div class="tab-content-body">
+                            {{#if @first}}
+                                <iframe class="tab-content-body--iframe hidden" frameborder="0" data-iframe="qrSettings"></iframe>
+                            {{else}}
+                                <iframe class="tab-content-body--iframe js-mtfIframe hidden" frameborder="0" data-iframe="mtfSettings"></iframe>
+                            {{/if}}
+                            </div>
                         </div>
-                        <a class="action-btn expand hidden" href="#" data-expand="mtfSettings">expand</a>
-                        <a class="action-btn settings active" href="#" data-btn="mtfSettings">settings</a>
                     </div>
-                    <div class="tab-content-body">
-                        <iframe class="tab-content-body--iframe js-mtfIframe hidden" frameborder="0" data-iframe="mtfSettings"></iframe>
+                {{/if}}
+
+                {{#if options.url}}
+                {{#if @last}}
+                    <div role="tabpanel" class="tab-content" id="public-folders">
+                {{else}}
+                    <div role="tabpanel" class="tab-content" id="fmy-folders">
+                {{/if}}
+                    <div class="content-wrap cf">
+                        <div class="tab-content-header">
+                        {{#if @last}}
+                            <a class="action-btn expand stand__alone" href="#" data-expand="generic2">expand</a>
+                        {{else}}
+                            <a class="action-btn expand stand__alone" href="#" data-expand="generic">expand</a>
+                        {{/if}}
+                        </div>
+                        <div class="tab-content-body">
+                        {{#if @last}}
+                        <iframe class="tab-content-body--iframe" src="{{options.url}}" frameborder="0" data-iframe="generic2"></iframe>
+                        {{else}}
+                            <iframe class="tab-content-body--iframe" src="{{options.url}}" frameborder="0" data-iframe="generic"></iframe>
+                        {{/if}}
+                        </div>
                     </div>
-                </div>
-            </div>
-            <div role="tabpanel" class="tab-content" id="public-folders">
-                <div class="content-wrap cf">
-                    <div class="tab-content-header">
-                        <a class="action-btn expand stand__alone" href="#" data-expand="generic2">expand</a>
                     </div>
-                    <div class="tab-content-body">
-                        <iframe class="tab-content-body--iframe" src="https://news.layervault.com/" frameborder="0" data-iframe="generic2"></iframe>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-        <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+                {{/if}}
+            {{/each}}
+        </script>
+
+         <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
         <script>window.jQuery || document.write('<script src="vendor/js/jquery-1.11.1.min.js"><\/script>')</script>
         <script src="vendor/js/placeholders.min.js"></script>
          <script src="//cdnjs.cloudflare.com/ajax/libs/handlebars.js/2.0.0/handlebars.min.js"></script>
