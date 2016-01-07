@@ -355,7 +355,7 @@ $(function(){
 
 	initApp = (function() {
 
-		$.getJSON('/' + (location.href.indexOf('omrimor.co.il') > 0 ? 'webapp/' : '') +
+		$.getJSON('/' + (location.href.indexOf('omrimor.co.il/') > 0 ? 'webapp/' : '') +
 		'data/config.json', function(){
 			// console.log(data.notification);
 
